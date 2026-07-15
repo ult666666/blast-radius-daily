@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "blast-radius",
+  "post": {
+    "dir": "dist/client",
+    "entrypoints": {
+      "default": {
+        "inline": true,
+        "entry": "splash.html",
+        "height": "tall"
+      },
+      "game": {
+        "entry": "game.html",
+        "height": "tall"
+      }
+    }
+  },
+  "server": {
+    "dir": "dist/server",
+    "entry": "index.cjs"
+  },
+  "permissions": {
+    "redis": true,
+    "reddit": {
+      "enable": true,
+      "scope": "moderator",
+      "asUser": ["SUBMIT_COMMENT"]
+    }
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "Create today's Blast Radius post",
+        "description": "Create a playable daily incident post",
+        "location": "subreddit",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/post-create"
+      }
+    ]
+  },
+  "triggers": {
+    "onAppInstall": "/internal/triggers/on-app-install",
+    "onPostDelete": "/internal/triggers/on-post-delete",
+    "onCommentDelete": "/internal/triggers/on-comment-delete"
+  },
+  "settings": {
+    "global": {
+      "score_sharing_approved": {
+        "type": "boolean",
+        "label": "Enable approved score sharing",
+        "helpText": "Keep disabled until Reddit has approved SUBMIT_COMMENT for the current app version. Sharing also requires a verified sticky command comment.",
+        "defaultValue": false
+      }
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  }
+}
