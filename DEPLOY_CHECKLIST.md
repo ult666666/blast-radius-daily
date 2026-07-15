@@ -14,8 +14,8 @@ Confirm all four stages pass: TypeScript, ESLint, 8 engine tests, production bui
 ## 2. Register or connect the Devvit app
 
 1. Sign in at <https://developers.reddit.com/new> with the intended Reddit account.
-2. Create a Phaser app using the slug `blast-radius` if available.
-3. If Reddit assigns another slug, update only the `name` field in `devvit.json`.
+2. Create the Devvit app with the reserved slug `blast-radius-daily`.
+3. Confirm the `name` field in `devvit.json` remains `blast-radius-daily`.
 4. Run `npm run login` and complete the browser authorization.
 5. Confirm the account with `npx devvit whoami`.
 
@@ -33,7 +33,7 @@ Confirm all four stages pass: TypeScript, ESLint, 8 engine tests, production bui
 
 1. Run `npm run deploy` to upload a private app version.
 2. Copy the resulting `developers.reddit.com/apps/{app-name}` URL into `SUBMISSION.md`.
-3. Optional: create the public GitHub repository `ult666666/blast-radius-daily`, commit this directory, and push it.
+3. Public repository: <https://github.com/ult666666/blast-radius-daily>.
 4. Optional: record the actual Devvit post with `DEMO_SCRIPT.md`; keep the final video under 60 seconds.
 5. Optional: upload the video publicly to YouTube or Vimeo and add the URL to `SUBMISSION.md`.
 6. Capture at least three clean images: launch screen, live graph with breakers, and result/leaderboard.

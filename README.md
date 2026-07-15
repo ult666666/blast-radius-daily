@@ -47,7 +47,7 @@ There may be more than one optimal cut. The server awards a 1,000-point optimiza
 Requirements: a Reddit account connected to Devvit, a test or destination subreddit you moderate, and Node.js 22.2 or newer.
 
 1. Create or select a Devvit app at <https://developers.reddit.com/new> using the Phaser template.
-2. Make sure the registered app name matches the `name` in `devvit.json`. The included development name is `blast-radius`; replace it if that slug is unavailable.
+2. Make sure the registered app name matches the `name` in `devvit.json`. This build uses the unique slug `blast-radius-daily`.
 3. Install dependencies with `npm install`.
 4. Sign in with `npm run login`.
 5. Set the test subreddit when prompted, or run with `DEVVIT_SUBREDDIT=your_test_subreddit npm run dev`.

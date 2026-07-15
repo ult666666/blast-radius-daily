@@ -120,6 +120,6 @@ Reddit's installation-scoped Redis is a strong fit for community games: the natu
 - [ ] App uploaded so the unique Developer Platform app link exists.
 - [ ] App installed in a public test subreddit with fewer than 200 members.
 - [ ] Public demo post created and confirmed playable on desktop and landscape touch devices; portrait remains explicitly unsupported.
-- [ ] Repository pushed publicly.
+- [x] Repository pushed publicly.
 - [ ] Optional sub-60-second demo video recorded and uploaded publicly.
 - [ ] Devpost form completed and submitted before July 15, 2026 at 6:00 p.m. PDT.
