@@ -1,5 +1,7 @@
 # Blast Radius Daily
 
+[![CI](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml/badge.svg)](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml)
+
 Blast Radius Daily is a one-minute community puzzle that turns data lineage into a dramatic daily incident. Everyone in a subreddit receives the same dependency map and the same breaking schema change. Players spend two circuit-breaker tokens, trigger the deploy, and watch the failure cascade through the graph. The goal is to preserve the highest-value dashboards, models, alerts, and exports.
 
 ![Blast Radius Daily lineage puzzle with two circuit breakers selected](assets/screenshots/01-lineage-board.png)
@@ -66,7 +68,7 @@ npm install
 npm run verify
 ```
 
-`npm run verify` performs strict TypeScript checking, ESLint, deterministic engine tests, and a production Devvit/Vite build.
+`npm run verify` performs strict TypeScript checking, ESLint, deterministic engine tests, and a production Devvit/Vite build. CI runs the same steps on Node 22 and 24 for every pull request and push to `main`.
 
 For a visual-only local demo that uses fake community data and never contacts Reddit:
 
