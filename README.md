@@ -79,7 +79,7 @@ npm run preview:local
 Then open:
 
 ```text
-http://127.0.0.1:5173/src/client/game.html?demo=1&day=2026-07-14
+http://127.0.0.1:4174/src/client/game.html?demo=1&day=2026-07-14
 ```
 
 The full server workflow must be tested through `devvit playtest`, because Reddit context, Redis, and user actions are only available inside Devvit.
