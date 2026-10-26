@@ -1,5 +1,6 @@
 import { GameObjects, Scene } from 'phaser';
-import { deleteGameData, shareScore, voteForProtocol } from '../api';
+import { deleteGameData, isDemoMode, shareScore, voteForProtocol } from '../api';
+import { reportDemoView } from '../demo-events';
 import type { ScoreResponse, SessionResponse } from '../../shared/api';
 import { PROTOCOLS, type ProtocolId } from '../../shared/game';
 import {
@@ -38,6 +39,7 @@ export class Result extends Scene {
       return;
     }
     const { session, response } = this.resultData;
+    reportDemoView({ phase: 'result', selectedIds: response.outcome.shieldIds });
     drawBackdrop(this);
     this.cameras.main.fadeIn(240, 6, 17, 29);
 
@@ -131,7 +133,7 @@ export class Result extends Scene {
 
     this.drawCommunityMeter(response.community.responders, response.community.goal, response.community.percent);
 
-    addKicker(this, 52, 507, 'OPTIONAL SCORE COMMENT', COLORS.amberText);
+    addKicker(this, 52, 507, isDemoMode() ? 'LOCAL SCORE SUMMARY (NOT POSTED)' : 'OPTIONAL SCORE COMMENT', COLORS.amberText);
     this.add.text(52, 527, response.commentPreview, {
       fontFamily: SANS,
       fontSize: '9px',
@@ -154,7 +156,7 @@ export class Result extends Scene {
       label:
         response.share.status === 'ready'
           ? `POST SCORE AS u/${session.username}`
-          : 'SCORE SHARING LOCKED PENDING REVIEW',
+          : isDemoMode() ? 'COMMENTS UNAVAILABLE IN OFFLINE DEMO' : 'SCORE SHARING LOCKED PENDING REVIEW',
       color: response.share.status === 'ready' ? COLORS.amber : COLORS.panelLight,
       textColor: response.share.status === 'ready' ? '#191403' : COLORS.muted,
       fontSize: response.share.status === 'ready' ? 11 : 9,
@@ -189,7 +191,7 @@ export class Result extends Scene {
 
     this.add.rectangle(884, 399, 328, 1, COLORS.grid, 1);
     addKicker(this, 720, 420, 'CHOOSE TOMORROW\'S PROTOCOL', COLORS.amberText);
-    this.add.text(720, 440, 'Your vote changes which asset class is worth 50% more tomorrow.', {
+    this.add.text(720, 440, isDemoMode() ? 'Try one local vote. The fictional tally resets on reload.' : 'Your vote changes which asset class is worth 50% more tomorrow.', {
       fontFamily: SANS,
       fontSize: '11px',
       color: COLORS.muted,
@@ -326,7 +328,7 @@ export class Result extends Scene {
     try {
       const response = await voteForProtocol(protocol);
       this.renderVoteButtons(response.selectedProtocol, response.protocolVotes);
-      this.voteStatus?.setText('Vote recorded. Tomorrow’s map will reflect the winner.').setColor(COLORS.cyanText);
+      this.voteStatus?.setText(isDemoMode() ? 'Local vote recorded. No community data was changed.' : 'Vote recorded. Tomorrow’s map will reflect the winner.').setColor(COLORS.cyanText);
     } catch (error) {
       for (const button of this.voteButtons) {
         button.setInteractive({ useHandCursor: true });
@@ -355,6 +357,7 @@ export class Result extends Scene {
   private async deleteSavedData(button: GameObjects.Container): Promise<void> {
     if (!this.deleteArmed) {
       this.deleteArmed = true;
+      reportDemoView({ phase: 'confirm-delete' });
       setButtonLabel(button, 'PRESS AGAIN TO DELETE SAVED DATA');
       this.voteStatus
         ?.setText('Deletion removes scores, votes, streak, and share drafts from app storage.')
@@ -366,6 +369,7 @@ export class Result extends Scene {
     setButtonLabel(button, 'DELETING SAVED DATA…');
     try {
       await deleteGameData();
+      reportDemoView({ phase: 'result', selectedIds: [] });
       setButtonLabel(button, 'SAVED GAME DATA DELETED  ✓');
       this.voteStatus
         ?.setText('Your app-stored game data has been removed.')

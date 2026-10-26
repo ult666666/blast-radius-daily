@@ -3,8 +3,17 @@
   "compilerOptions": {
     "outDir": "../dist/types/tools",
     "tsBuildInfoFile": "../dist/types/vite/tsconfig.tsbuildinfo",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "rootDir": ".."
   },
-  "include": ["../vite.config.ts", "../vite.local.config.ts"]
+  "include": [
+    "../vite.config.ts",
+    "../vite.local.config.ts",
+    "../vite.demo.config.ts",
+    "../scripts/build-demo.ts",
+    "../playwright.config.ts",
+    "../scripts/phaser-demo.ts"
+  ]
 }

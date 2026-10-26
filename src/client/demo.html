@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Play a deterministic data-lineage puzzle offline. Synthetic community fixtures, local in-memory state, no Reddit account or network required."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src data:; style-src 'unsafe-inline' data:; img-src data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
+    <meta name="blast-source-commit" content="{{SOURCE_COMMIT}}" />
+    <title>Blast Radius Daily — offline practice demo</title>
+    <!-- DEMO_STYLE -->
+  </head>
+  <body>
+    <header>
+      <p>Blast Radius Daily · Offline practice</p>
+      <h1>Contain a schema-change cascade</h1>
+      <p>
+        Play the real puzzle with fictional community figures. This file works
+        without a server or network. Your run, vote and deletion affect memory
+        in this tab only; reload resets the fixtures. Score comments are
+        unavailable.
+      </p>
+      <p>
+        Choose up to two circuit breakers on the map, then trigger the change.
+        Best on desktop or a landscape tablet; narrow portrait gameplay is not
+        optimized.
+      </p>
+      <form id="day-form">
+        <label for="incident-day">Incident day (UTC)</label
+        ><input
+          id="incident-day"
+          type="date"
+          required
+          min="0001-01-01"
+          max="9999-12-31"
+        /><button type="submit">Load day</button>
+      </form>
+    </header>
+    <main>
+      <p
+        id="demo-status"
+        role="status"
+        aria-label="Local game status"
+        aria-live="polite"
+      >
+        Loading the local map…
+      </p>
+      <div
+        id="game-container"
+        aria-label="Pointer-operated lineage puzzle"
+      ></div>
+      <h2>This local run</h2>
+      <dl class="run-summary">
+        <div>
+          <dt>Incident day</dt>
+          <dd><output aria-label="Local incident day">—</output></dd>
+        </div>
+        <div>
+          <dt>Selected breakers</dt>
+          <dd><output aria-label="Local selected breakers">None</output></dd>
+        </div>
+        <div>
+          <dt>Latest score</dt>
+          <dd><output aria-label="Local score">None</output></dd>
+        </div>
+        <div>
+          <dt>Best score in this tab</dt>
+          <dd><output aria-label="Local best score">None</output></dd>
+        </div>
+        <div>
+          <dt>Fixture streak</dt>
+          <dd><output aria-label="Local streak">3</output></dd>
+        </div>
+        <div>
+          <dt>Your local vote</dt>
+          <dd><output aria-label="Local vote">None</output></dd>
+        </div>
+        <div>
+          <dt>Votes: dashboards, models, edges</dt>
+          <dd><output aria-label="Synthetic vote totals">7, 11, 5</output></dd>
+        </div>
+        <div>
+          <dt>Fixture community</dt>
+          <dd>
+            <output aria-label="Local responders">18 / 25 (synthetic)</output>
+          </dd>
+        </div>
+      </dl>
+      <noscript
+        >This game requires JavaScript. Its source and offline setup are
+        available in the repository linked below.</noscript
+      >
+    </main>
+    <footer>
+      <p>
+        This demo does not test Reddit installation, Redis storage, live
+        community activity or comment permissions. The existing game canvas uses
+        pointer controls; the date selector and local summary are native HTML.
+      </p>
+      <p>
+        <a href="https://github.com/ult666666/blast-radius-daily"
+          >Source and full setup</a
+        >
+        ·
+        <a
+          href="https://ult666666.github.io/projects/catalog.html#blast-radius-daily"
+          >Project explorer</a
+        >
+      </p>
+      <details>
+        <summary>Source and bundled licenses</summary>
+        <p>Source commit: <code>{{SOURCE_COMMIT}}</code></p>
+        <pre><!-- DEMO_LICENSES --></pre>
+      </details>
+    </footer>
+    <!-- DEMO_SCRIPT -->
+  </body>
+</html>

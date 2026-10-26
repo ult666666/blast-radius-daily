@@ -1,0 +1,93 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #06111d;
+  color: #eaf5fb;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0 auto;
+  padding: 24px;
+  max-width: 1200px;
+}
+a {
+  color: #69e5ce;
+}
+h1 {
+  margin: 6px 0 12px;
+  font-size: clamp(24px, 4vw, 38px);
+}
+header p,
+footer p {
+  max-width: 78ch;
+  color: #b8ccda;
+  line-height: 1.5;
+}
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 18px 0;
+}
+input,
+button {
+  font: inherit;
+  border: 1px solid #7897ad;
+  border-radius: 5px;
+  background: #122c40;
+  color: #eaf5fb;
+  padding: 8px 12px;
+}
+button {
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 3px solid #69e5ce;
+  outline-offset: 3px;
+}
+#game-container {
+  width: 100%;
+  aspect-ratio: 1100 / 720;
+  overflow: hidden;
+}
+canvas {
+  display: block;
+}
+#demo-status {
+  min-height: 1.5em;
+  color: #69e5ce;
+}
+.run-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  padding: 16px;
+  background: #0b2030;
+}
+.run-summary div {
+  min-width: 0;
+}
+dt {
+  font-size: 13px;
+  color: #b8ccda;
+}
+dd {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+details {
+  margin: 20px 0;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+}

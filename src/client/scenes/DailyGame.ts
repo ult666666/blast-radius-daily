@@ -1,5 +1,6 @@
 import { GameObjects, Scene } from 'phaser';
 import { getSession, isDemoMode, submitScore } from '../api';
+import { reportDemoView } from '../demo-events';
 import type { SessionResponse } from '../../shared/api';
 import {
   evaluateShielding,
@@ -380,6 +381,7 @@ export class DailyGame extends Scene {
       index < used ? '◆' : '◇'
     ).join(' ');
     this.budgetText.setText(`${tokens}   ${used}/${this.session.puzzle.shieldBudget}`);
+    reportDemoView({ phase: 'board', selectedIds: [...this.selected] });
   }
 
   private currentCost(): number {
@@ -405,6 +407,7 @@ export class DailyGame extends Scene {
     }
 
     this.running = true;
+    reportDemoView({ phase: 'cascade', selectedIds: [...this.selected] });
     this.runButton?.disableInteractive();
     this.setStatus('Deploying change… tracing downstream failures.', COLORS.coralText);
     this.widgets.get(this.session.puzzle.sourceId)?.redraw('failed');
