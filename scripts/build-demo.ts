@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { randomUUID } from 'node:crypto';
 import { build } from 'vite';
 import config from '../vite.demo.config';
+import { retainedPhaserCredits } from './phaser-demo';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const results = await build({ ...config, configFile: false, root });
@@ -59,7 +60,37 @@ const css = assetText('demo.css');
 const licenses =
   (await fs.readFile(path.join(root, 'LICENSE'), 'utf8')) +
   '\n\nBundled dependencies\n\n' +
-  assetText('licenses.txt');
+  assetText('licenses.txt') +
+  '\n\nEventEmitter3 embedded in Phaser\n\n' +
+  (await fs.readFile(
+    path.join(root, 'node_modules/eventemitter3/LICENSE'),
+    'utf8',
+  )) +
+  '\n\nMatter.js embedded in Phaser\n\n' +
+  (await fs.readFile(
+    path.join(root, 'node_modules/phaser/src/physics/matter-js/lib/license.js'),
+    'utf8',
+  )) +
+  '\n\nSupplementary notices for credited upstream sources\n' +
+  'These source-specific notices supplement the exact packaged credits below; they do not relabel all Phaser adaptations with one license.\n\n' +
+  (
+    JSON.parse(
+      await fs.readFile(
+        path.join(root, 'docs/licenses/phaser-upstream-notices.json'),
+        'utf8',
+      ),
+    ) as Array<{ component: string; source: string; text: string }>
+  )
+    .map((item) => `${item.component}\n${item.source}\n\n${item.text}`)
+    .join('\n\n') +
+  '\n\nRetained copyright, license and source-credit comments from pinned Phaser 4.2.0\n' +
+  'The standalone runtime excludes unused requestVideoFrame polyfill module 63595; other video APIs are not a supported demo feature.\n\n' +
+  retainedPhaserCredits(
+    await fs.readFile(
+      path.join(root, 'node_modules/phaser/dist/phaser.esm.js'),
+      'utf8',
+    ),
+  );
 const escape = (text: string) =>
   text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const template = await fs.readFile(

@@ -18,6 +18,22 @@ test('standalone artifact includes its licenses, self-contained resources and ma
   expect(html).toContain('BSD 3-Clause License');
   expect(html).toContain('The MIT License (MIT)');
   expect(html).toContain('Phaser Studio Inc.');
+  for (const author of [
+    'Mapbox',
+    'Vladimir Agafonkin',
+    'Arnout Kazemier',
+    'Liam Brummitt',
+    'Stefan Hedman',
+    'Angry Bytes',
+    'Matt DesLauriers',
+  ])
+    expect(html).toContain(author);
+  expect(html).toContain('ISC License');
+  const runtime = Buffer.from(
+    html.match(/src="data:text\/javascript;base64,([^"]+)"/)![1]!,
+    'base64',
+  ).toString();
+  expect(runtime).not.toContain('_rvfcpolyfillmap');
   expect(html).toContain("connect-src 'none'");
   expect(html).not.toMatch(
     /(?:src|href)="(?:\.\/|\/src|https?:).*?(?:\.js|\.css)/,
@@ -137,11 +153,21 @@ test('offline canvas journey uses the real engine, transfers votes and deletes l
   ).toContainText('Map ready');
   await expect(page.getByLabel('Local best score')).toHaveText('None');
   await expect(page.getByLabel('Local streak')).toHaveText('0');
+  const freshNode = puzzle.nodes.find((node) => node.id === 'identity')!;
+  await clickCanvas(page, freshNode.x, freshNode.y);
+  await expect(page.getByLabel('Local selected breakers')).toHaveText(
+    'identity',
+  );
   await clickCanvas(page, 941, 653);
   await expect(
     page.getByRole('status', { name: 'Local game status' }),
+  ).toContainText('Tracing');
+  await expect(
+    page.getByRole('status', { name: 'Local game status' }),
   ).toContainText('Result ready');
-  await expect(page.getByLabel('Local best score')).toHaveText('0');
+  await expect(page.getByLabel('Local best score')).toHaveText(
+    String(evaluateShielding(puzzle, ['identity']).score),
+  );
   await expect(page.getByLabel('Local streak')).toHaveText('1');
   await page.reload();
   await expect(

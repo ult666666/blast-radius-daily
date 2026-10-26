@@ -20,10 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const { session, lastOutcome, deleted } = getDemoSnapshot();
       day.value = session.puzzle.day;
       output('Local incident day', session.puzzle.day);
-      output(
-        'Local selected breakers',
-        deleted ? 'None' : view.selectedIds?.join(', ') || 'None',
-      );
+      output('Local selected breakers', view.selectedIds?.join(', ') || 'None');
       output('Local score', lastOutcome ? String(lastOutcome.score) : 'None');
       output(
         'Local best score',
@@ -39,16 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'Local responders',
         `${session.community.responders} / ${session.community.goal} (synthetic)`,
       );
-      status.textContent = deleted
-        ? view.phase === 'board'
-          ? 'Map ready. Local game data deleted; a new run starts fresh.'
-          : 'Local game data deleted. Background fixtures remain synthetic.'
-        : view.phase === 'confirm-delete'
-          ? 'Confirm deletion by pressing the privacy control again.'
-          : view.phase === 'cascade'
-            ? 'Tracing the failure cascade…'
+      status.textContent =
+        view.phase === 'cascade'
+          ? 'Tracing the failure cascade…'
+          : view.phase === 'confirm-delete'
+            ? 'Confirm deletion by pressing the privacy control again.'
             : view.phase === 'result'
-              ? 'Result ready. Scores and votes stay in this tab only.'
+              ? deleted
+                ? 'Local game data deleted. Background fixtures remain synthetic.'
+                : 'Result ready. Scores and votes stay in this tab only.'
               : ready
                 ? 'Map ready. Place up to two circuit breakers, then trigger the change.'
                 : 'Loading the local map…';

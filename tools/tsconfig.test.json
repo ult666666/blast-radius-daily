@@ -3,13 +3,22 @@
   "compilerOptions": {
     "outDir": "../dist/types/test",
     "tsBuildInfoFile": "../dist/types/test/tsconfig.tsbuildinfo",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "rootDir": "..",
     "noEmit": true
   },
-  "include": ["../test/**/*.ts"],
+  "include": [
+    "../test/**/*.ts",
+    "../scripts/phaser-demo.ts"
+  ],
   "references": [
-    { "path": "./tsconfig.shared.json" },
-    { "path": "./tsconfig.client.json" }
+    {
+      "path": "./tsconfig.shared.json"
+    },
+    {
+      "path": "./tsconfig.client.json"
+    }
   ]
 }

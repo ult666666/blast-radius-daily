@@ -369,6 +369,7 @@ export class Result extends Scene {
     setButtonLabel(button, 'DELETING SAVED DATA…');
     try {
       await deleteGameData();
+      reportDemoView({ phase: 'result', selectedIds: [] });
       setButtonLabel(button, 'SAVED GAME DATA DELETED  ✓');
       this.voteStatus
         ?.setText('Your app-stored game data has been removed.')

@@ -1,6 +1,18 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
+import fs from 'node:fs/promises';
+import { offlinePhaserSource } from './scripts/phaser-demo';
 export default defineConfig({
+  plugins: [
+    {
+      name: 'offline-phaser-without-unused-video-polyfill',
+      enforce: 'pre',
+      async load(id) {
+        if (id.replaceAll('\\', '/').endsWith('/phaser/dist/phaser.esm.js'))
+          return offlinePhaserSource(await fs.readFile(id, 'utf8'));
+      },
+    },
+  ],
   define: { 'import.meta.env.VITE_OFFLINE_DEMO': JSON.stringify('true') },
   build: {
     write: false,
