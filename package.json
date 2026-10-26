@@ -7,6 +7,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "build:demo": "tsx scripts/build-demo.ts",
+    "test:demo": "npm run build:demo && playwright test",
     "deploy": "npm run verify && devvit upload",
     "dev": "devvit playtest",
     "launch": "npm run verify && devvit publish",
@@ -17,10 +19,10 @@
     "screenshots": "bash scripts/capture-screenshots.sh",
     "test": "tsx --test test/**/*.test.ts",
     "type-check": "tsc --build",
-    "verify": "npm run type-check && npm run lint && npm test && npm run build"
+    "verify": "npm run type-check && npm run lint && npm test && npm run build && npm run build:demo"
   },
   "engines": {
-    "node": ">=22.2.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@devvit/start": "0.13.7",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
     "@types/node": "^22.19.19",
     "eslint": "10.6.0",
     "globals": "17.7.0",

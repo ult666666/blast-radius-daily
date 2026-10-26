@@ -3,7 +3,7 @@ import type {
   ScoreResponse,
   SessionResponse,
   VoteResponse,
-} from "../shared/api";
+} from '../shared/api';
 import {
   PROTOCOLS,
   buildDailyPuzzle,
@@ -12,20 +12,20 @@ import {
   isProtocolId,
   type ProtocolId,
   type ShieldOutcome,
-} from "../shared/game";
+} from '../shared/game';
 
-export const DEFAULT_DEMO_DAY = "2026-07-14";
+export const DEFAULT_DEMO_DAY = '2026-07-14';
 export function parseDemoDay(value: string | null | undefined): string {
   if (value === null || value === undefined) return DEFAULT_DEMO_DAY;
   const date = new Date(`${value}T00:00:00.000Z`);
   if (
     !/^\d{4}-\d{2}-\d{2}$/.test(value) ||
-    value.startsWith("0000") ||
+    value.startsWith('0000') ||
     !Number.isFinite(date.getTime()) ||
     date.toISOString().slice(0, 10) !== value
   ) {
     throw new Error(
-      "Choose a real date in YYYY-MM-DD format (years 0001–9999).",
+      'Choose a real date in YYYY-MM-DD format (years 0001–9999).',
     );
   }
   return value;
@@ -38,14 +38,14 @@ export type DemoSnapshot = {
 };
 function fixture(day: string): SessionResponse {
   return {
-    type: "session",
-    username: "demo-responder",
-    puzzle: buildDailyPuzzle(day, "protect-models"),
+    type: 'session',
+    username: 'demo-responder',
+    puzzle: buildDailyPuzzle(day, 'protect-models'),
     leaderboard: [
-      { rank: 1, username: "graph_goblin", score: 5725 },
-      { rank: 2, username: "null-pointer", score: 5400 },
-      { rank: 3, username: "schemaqueen", score: 4875 },
-      { rank: 4, username: "tableflip42", score: 3900 },
+      { rank: 1, username: 'graph_goblin', score: 5725 },
+      { rank: 2, username: 'null-pointer', score: 5400 },
+      { rank: 3, username: 'schemaqueen', score: 4875 },
+      { rank: 4, username: 'tableflip42', score: 3900 },
     ],
     community: { responders: 18, goal: 25, percent: 72 },
     streak: 3,
@@ -71,9 +71,9 @@ export function createDemoState(requestedDay: string) {
     score(shieldIds: string[]): ScoreResponse {
       if (
         !Array.isArray(shieldIds) ||
-        shieldIds.some((id) => typeof id !== "string")
+        shieldIds.some((id) => typeof id !== 'string')
       )
-        throw new Error("Invalid circuit breaker selection");
+        throw new Error('Invalid circuit breaker selection');
       const outcome = evaluateShielding(session.puzzle, shieldIds);
       const bestScore = Math.max(session.bestScore ?? 0, outcome.score);
       const streak =
@@ -90,7 +90,7 @@ export function createDemoState(requestedDay: string) {
       lastOutcome = outcome;
       deleted = false;
       return structuredClone({
-        type: "score",
+        type: 'score',
         outcome,
         leaderboard,
         community,
@@ -103,25 +103,25 @@ export function createDemoState(requestedDay: string) {
           streak,
         ),
         share: {
-          status: "disabled",
+          status: 'disabled',
           token: null,
           message:
-            "Offline demo: score comments are unavailable. Nothing is posted.",
+            'Offline demo: score comments are unavailable. Nothing is posted.',
         },
       });
     },
     vote(protocol: ProtocolId): VoteResponse {
       if (!isProtocolId(protocol))
-        throw new Error("Unknown community protocol");
+        throw new Error('Unknown community protocol');
       if (session.bestScore === null)
-        throw new Error("Finish a local run before voting.");
+        throw new Error('Finish a local run before voting.');
       const protocolVotes = background.protocolVotes.map((vote) => ({
         ...vote,
         count: vote.count + Number(vote.id === protocol),
       }));
       session = { ...session, selectedProtocol: protocol, protocolVotes };
       return structuredClone({
-        type: "vote",
+        type: 'vote',
         selectedProtocol: protocol,
         protocolVotes,
       });
@@ -130,7 +130,7 @@ export function createDemoState(requestedDay: string) {
       session = { ...structuredClone(background), streak: 0 };
       lastOutcome = null;
       deleted = true;
-      return { type: "delete-data", status: "deleted" };
+      return { type: 'delete-data', status: 'deleted' };
     },
   };
 }

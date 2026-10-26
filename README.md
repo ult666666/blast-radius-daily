@@ -46,7 +46,7 @@ There may be more than one optimal cut. The server awards a 1,000-point optimiza
 
 ## Moderator setup
 
-Requirements: a Reddit account connected to Devvit, a test or destination subreddit you moderate, and Node.js 22.2 or newer.
+Requirements: a Reddit account connected to Devvit, a test or destination subreddit you moderate, and Node.js 22.12 or newer (the Vite 8 build-tool floor).
 
 1. Create or select a Devvit app at <https://developers.reddit.com/new> using the Phaser template.
 2. Make sure the registered app name matches the `name` in `devvit.json`. This build uses the unique slug `blast-radius-daily`.
@@ -68,9 +68,29 @@ npm install
 npm run verify
 ```
 
-`npm run verify` performs strict TypeScript checking, ESLint, deterministic engine tests, and a production Devvit/Vite build. CI runs the same steps on Node 22 and 24 for every pull request and push to `main`.
+`npm run verify` performs strict TypeScript checking, ESLint, deterministic engine/demo-state tests, the production Devvit build and the standalone offline build. CI runs these steps on Node 22 and 24. A separate Chromium job plays the actual offline canvas journeys.
 
-For a visual-only local demo that uses fake community data and never contacts Reddit:
+### Play without Reddit or a server
+
+```bash
+npm ci --ignore-scripts
+npm run build:demo
+```
+
+Open `dist-demo/blast-radius-demo.html` directly in a modern desktop browser. The single file includes its code, styles and license notices, so it works with the browser offline. It defaults to the fixed July 14, 2026 fixture; the native date selector loads another deterministic day. [Offline workflow and verification](docs/OFFLINE_DEMO.md) describes the state, artifacts and limits.
+
+All names, ranks, streaks, community totals and votes in this demo are fictional fixtures. Your changes live only in the tab's memory. Voting transfers one vote, replay retains the best score, and two-step deletion clears your synthetic contribution. Reload resets the sample. Comments are unavailable; no Reddit credentials, APIs or storage are used.
+
+To verify the complete flow yourself:
+
+```bash
+npx playwright install chromium --only-shell
+npm run test:demo
+```
+
+The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Screenshots and failure traces are retained under `.demo-results/`.
+
+The existing Vite visual preview remains available for development:
 
 ```bash
 npm run preview:local

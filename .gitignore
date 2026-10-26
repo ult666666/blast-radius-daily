@@ -1,5 +1,8 @@
 node_modules/
 dist/
+dist-demo/
+.demo-results/
+.superpowers/
 *.log
 .DS_Store
 .env*

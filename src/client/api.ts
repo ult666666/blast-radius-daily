@@ -8,30 +8,30 @@ import type {
   ShareResponse,
   VoteRequest,
   VoteResponse,
-} from "../shared/api";
-import type { ProtocolId } from "../shared/game";
-import { createDemoState, parseDemoDay } from "./demo-state";
+} from '../shared/api';
+import type { ProtocolId } from '../shared/game';
+import { createDemoState, parseDemoDay } from './demo-state';
 
 const demoMode =
-  import.meta.env.VITE_OFFLINE_DEMO === "true" ||
-  new URLSearchParams(window.location.search).get("demo") === "1";
+  import.meta.env.VITE_OFFLINE_DEMO === 'true' ||
+  new URLSearchParams(window.location.search).get('demo') === '1';
 let demoState: ReturnType<typeof createDemoState> | null = null;
 function localState() {
   return (demoState ??= createDemoState(
-    parseDemoDay(new URLSearchParams(window.location.search).get("day")),
+    parseDemoDay(new URLSearchParams(window.location.search).get('day')),
   ));
 }
 function changed() {
-  window.dispatchEvent(new Event("blast-demo-state"));
+  window.dispatchEvent(new Event('blast-demo-state'));
 }
 export function getDemoSnapshot() {
   if (!demoMode)
-    throw new Error("The local snapshot is available only in demo mode.");
+    throw new Error('The local snapshot is available only in demo mode.');
   return localState().snapshot();
 }
 export function subscribeDemoState(listener: () => void): () => void {
-  window.addEventListener("blast-demo-state", listener);
-  return () => window.removeEventListener("blast-demo-state", listener);
+  window.addEventListener('blast-demo-state', listener);
+  return () => window.removeEventListener('blast-demo-state', listener);
 }
 
 export function isDemoMode(): boolean {
@@ -42,7 +42,7 @@ export async function getSession(): Promise<SessionResponse> {
   if (demoMode) {
     return localState().session();
   }
-  return await apiRequest<SessionResponse>("/api/session");
+  return await apiRequest<SessionResponse>('/api/session');
 }
 
 export async function submitScore(shieldIds: string[]): Promise<ScoreResponse> {
@@ -51,9 +51,9 @@ export async function submitScore(shieldIds: string[]): Promise<ScoreResponse> {
     changed();
     return result;
   }
-  return await apiRequest<ScoreResponse>("/api/score", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
+  return await apiRequest<ScoreResponse>('/api/score', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ shieldIds } satisfies ScoreRequest),
   });
 }
@@ -66,9 +66,9 @@ export async function voteForProtocol(
     changed();
     return result;
   }
-  return await apiRequest<VoteResponse>("/api/vote", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
+  return await apiRequest<VoteResponse>('/api/vote', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ protocol } satisfies VoteRequest),
   });
 }
@@ -76,12 +76,12 @@ export async function voteForProtocol(
 export async function shareScore(token: string): Promise<ShareResponse> {
   if (demoMode) {
     throw new Error(
-      "Score sharing is unavailable in the offline demo. Nothing was posted.",
+      'Score sharing is unavailable in the offline demo. Nothing was posted.',
     );
   }
-  return await apiRequest<ShareResponse>("/api/share", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
+  return await apiRequest<ShareResponse>('/api/share', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ token } satisfies ShareRequest),
   });
 }
@@ -92,8 +92,8 @@ export async function deleteGameData(): Promise<DeleteDataResponse> {
     changed();
     return result;
   }
-  return await apiRequest<DeleteDataResponse>("/api/data", {
-    method: "DELETE",
+  return await apiRequest<DeleteDataResponse>('/api/data', {
+    method: 'DELETE',
   });
 }
 
@@ -110,11 +110,11 @@ async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
 
 function isApiError(value: unknown): value is ApiError {
   return (
-    typeof value === "object" &&
+    typeof value === 'object' &&
     value !== null &&
-    "status" in value &&
-    value.status === "error" &&
-    "message" in value &&
-    typeof value.message === "string"
+    'status' in value &&
+    value.status === 'error' &&
+    'message' in value &&
+    typeof value.message === 'string'
   );
 }
