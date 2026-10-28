@@ -28,6 +28,11 @@ updates:
       # Remove this entry once a typescript-eslint release accepts 7.x.
       - dependency-name: "typescript"
         versions: ["7.x"]
+      # Keep Node type definitions on the oldest supported runtime
+      # (engines: node >=22.12.0), so code cannot type-check against
+      # APIs that Node 22 lacks. Raise this with the engines minimum.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
