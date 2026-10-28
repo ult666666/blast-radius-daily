@@ -2,15 +2,17 @@
 
 [![CI](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml/badge.svg)](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml)
 
+**[Play the offline demo](https://ult666666.github.io/projects/blast-radius-demo.html)** in a desktop browser. It runs the real puzzle engine with fictional community data and needs no Reddit account.
+
 Blast Radius Daily is a one-minute community puzzle that turns data lineage into a dramatic daily incident. Everyone in a subreddit receives the same dependency map and the same breaking schema change. Players spend two circuit-breaker tokens, trigger the deploy, and watch the failure cascade through the graph. The goal is to preserve the highest-value dashboards, models, alerts, and exports.
 
 ![Blast Radius Daily lineage puzzle with two circuit breakers selected](assets/screenshots/01-lineage-board.png)
 
-The game is designed for Reddit communities that enjoy engineering, systems thinking, optimization, or daily collaborative challenges. It is immediately playable from a Reddit post and optimized for desktop and landscape-tablet play. The current 1100×720 board is not presented as a narrow portrait-phone experience. The game does not require an external account, external server, payment, or API key.
+The game is designed for Reddit communities that enjoy engineering, systems thinking, optimization, or daily collaborative challenges. It runs inside a Reddit post as a Devvit app and is built for desktop and landscape-tablet play. The current 1100×720 board is not presented as a narrow portrait-phone experience. The game does not require an external account, external server, payment, or API key. No public Reddit post is linked yet, so the offline demo above is the way to play it.
 
 ![Blast Radius Daily incident result, community meter, leaderboard, and tomorrow-protocol vote](assets/screenshots/02-incident-result.png)
 
-Every completed run contributes to a subreddit-wide containment meter and a daily leaderboard. A streak rewards returning players. After playing, each responder can vote for tomorrow's community protocol; the winning protocol makes dashboards, models, or external-edge assets 50% more valuable in the next puzzle. The app also contains a fail-closed score-comment flow, but it stays disabled until Reddit approves user-action permissions for the current version and the developer explicitly enables it. When enabled, it requires a verified sticky command comment and posts only the exact one-time server draft shown to the player.
+Every completed run contributes to a subreddit-wide containment meter and a daily leaderboard. A streak rewards returning players. After playing, each responder can vote for tomorrow's community protocol; the winning protocol makes dashboards, models, or external-edge assets 50% more valuable in the next puzzle.
 
 Important operational notes:
 
@@ -50,7 +52,7 @@ Requirements: a Reddit account connected to Devvit, a test or destination subred
 
 1. Create or select a Devvit app at <https://developers.reddit.com/new> using the Phaser template.
 2. Make sure the registered app name matches the `name` in `devvit.json`. This build uses the unique slug `blast-radius-daily`.
-3. Install dependencies with `npm install`.
+3. Install dependencies with `npm ci`.
 4. Sign in with `npm run login`.
 5. Set the test subreddit when prompted, or run with `DEVVIT_SUBREDDIT=your_test_subreddit npm run dev`.
 6. Playtest on desktop and a landscape touch viewport. Installation creates the first daily post automatically. Narrow portrait phones are outside this version's stated support.
@@ -64,7 +66,7 @@ The menu action and installation trigger create a custom post plus a command com
 ## Developer setup and verification
 
 ```bash
-npm install
+npm ci
 npm run verify
 ```
 
@@ -132,9 +134,11 @@ Blast Radius Daily stores only the minimum data required for its game mechanics:
 - A pending exact-text share draft: the same daily-key window and deleted after use.
 - Native score comment: only when the feature is approved and enabled and the player presses the explicitly labeled post button; the comment follows normal Reddit deletion and reporting controls.
 
+The app also contains a fail-closed score-comment flow. It stays disabled until Reddit approves user-action permissions for the current version and the developer explicitly enables it. When enabled, it requires a verified sticky command comment and posts only the exact one-time server draft shown to the player.
+
 All game state is stored inside the subreddit installation's Devvit Redis namespace. Nothing is sent to an external service. The app does not read private messages, browsing history, email addresses, precise location, or content from other posts and comments. It does not permit free-form in-app content, so protocol contributions are limited to three safe predefined choices. Expiring keys remove account-linked state within 30 days, while the result screen provides an immediate two-step deletion control. Post and command-comment deletion triggers remove their stored routing metadata.
 
-Devvit Web 0.13.7 does not expose an `AccountDelete` trigger in `devvit.json`, so the app cannot receive an immediate platform event when a Reddit account itself is deleted. Until that capability exists, the build minimizes retention, provides immediate user-initiated deletion, and does not claim event-driven account-deletion handling.
+Devvit Web 0.15.1 does not expose an `AccountDelete` trigger in `devvit.json`, so the app cannot receive an immediate platform event when a Reddit account itself is deleted. Until that capability exists, the build minimizes retention, provides immediate user-initiated deletion, and does not claim event-driven account-deletion handling.
 
 ## Accessibility and device support
 
@@ -147,7 +151,7 @@ Devvit Web 0.13.7 does not expose an `AccountDelete` trigger in `devvit.json`, s
 
 ## Support
 
-For app issues, contact Charles Dai at `charles@madebymotionx.com` or open an issue in the public project repository once published.
+For app issues, contact Charles Dai at `charles@madebymotionx.com` or [open an issue in this repository](https://github.com/ult666666/blast-radius-daily/issues).
 
 ## Credits and license
 

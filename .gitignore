@@ -3,6 +3,7 @@ dist/
 dist-demo/
 .demo-results/
 .superpowers/
+docs/superpowers/
 *.log
 .DS_Store
 .env*

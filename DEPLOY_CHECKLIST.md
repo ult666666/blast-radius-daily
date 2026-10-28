@@ -5,11 +5,11 @@ No step below requires payment. The local build is complete; these actions requi
 ## 1. Preflight
 
 ```bash
-cd "/Users/prince/Documents/Outsource Jobs/projects/blast-radius-daily"
+cd blast-radius-daily
 npm run verify
 ```
 
-Confirm all four stages pass: TypeScript, ESLint, 8 engine tests, production build.
+Confirm every stage passes: TypeScript, ESLint, the engine tests, the Devvit build and the offline demo build.
 
 ## 2. Register or connect the Devvit app
 

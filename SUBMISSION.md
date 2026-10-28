@@ -24,7 +24,7 @@ Blast Radius Daily is a native Reddit community game where everyone receives the
 
 ## Inspiration
 
-A tiny upstream data change can silently break a dashboard, a model, and a customer-facing alert at the same time. That hidden dependency chain already feels like a strategy game. We turned it into one: trace the blast, spend a deliberately scarce defense budget, and compare your containment plan with the whole community.
+A tiny upstream data change can silently break a dashboard, a model, and a customer-facing alert at the same time. That hidden dependency chain already feels like a strategy game. I turned it into one: trace the blast, spend a deliberately scarce defense budget, and compare your containment plan with the whole community.
 
 Reddit is the ideal home because the best part is not a private high score. It is seeing the same incident, arguing about the best cut in the comments, watching a community response goal fill, and voting on the constraints everyone will face tomorrow.
 
@@ -73,7 +73,7 @@ Every responder contributes to the community containment meter and chooses one o
 
 ## Challenges
 
-The biggest challenge was making a graph puzzle strategically meaningful in under a minute. If every branch had one parent, the obvious move would always be to shield the first two nodes. We added converging paths, different breaker costs, terminal values, and a daily asset-class modifier. A cut can save one branch but still leave a shared dashboard exposed through another path.
+The biggest challenge was making a graph puzzle strategically meaningful in under a minute. If every branch had one parent, the obvious move would always be to shield the first two nodes. I added converging paths, different breaker costs, terminal values, and a daily asset-class modifier. A cut can save one branch but still leave a shared dashboard exposed through another path.
 
 The second challenge was making social features feel native and safe. Structured protocol votes create real user influence without collecting arbitrary text. Because unapproved Devvit user actions can fall back to the app account, score sharing ships disabled and can be enabled only after approval; even then it is manual, previewed in full, token-bound, and routed under a verified sticky command comment.
 
@@ -98,13 +98,12 @@ Reddit's installation-scoped Redis is a strong fit for community games: the natu
 - Introduce cooperative multi-day “incident seasons” where each day's containment affects the next map.
 - Use Devvit analytics to tune the one-minute flow after real community testing.
 
-## Submission links — fill after account-bound deployment
+## Submission links
 
-- App listing: `https://developers.reddit.com/apps/APP_SLUG`
-- Public demo subreddit: `https://www.reddit.com/r/SUBREDDIT/`
-- Demo post: `https://www.reddit.com/r/SUBREDDIT/comments/POST_ID/`
-- Public repository: `https://github.com/ult666666/blast-radius-daily`
-- Optional public video under 60 seconds: `VIDEO_URL`
+The app listing, demo subreddit, demo post and video depend on the account-bound steps in `DEPLOY_CHECKLIST.md`. None is linked yet.
+
+- Public repository: <https://github.com/ult666666/blast-radius-daily>
+- Offline demo, no Reddit account needed: <https://ult666666.github.io/projects/blast-radius-demo.html>
 
 ## Submission requirement audit
 
