@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 // The prebundle contains dependencies invisible to Vite's package collector.
 // Updating Phaser requires reviewing these notices and the excluded module.
 const PHASER_ESM_SHA256 =
-  '8797ccd3d7b02b643922cbada7224d8a548b06a7ed4770b0eb1be3abad80d6d4';
+  'df50bc49e7856363b625fdf4f2c4e2e577cfc1644690c026c3610c594aff372f';
 function audited(source: string): void {
   if (createHash('sha256').update(source).digest('hex') !== PHASER_ESM_SHA256)
     throw new Error(
