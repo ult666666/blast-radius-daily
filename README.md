@@ -182,6 +182,8 @@ For app issues, contact Charles Dai at `charles@madebymotionx.com` or
 
 Built with the official Reddit Devvit Phaser starter, Phaser 4, Vite, Hono and TypeScript. The
 game design, copy, visual treatment, graphs and puzzle data in this repository are original and
-drawn in code. Built with AI coding assistants; I reviewed the code and the tests that check it.
+drawn in code.
+
+Built with AI coding assistants. I reviewed the code and the tests that check it.
 
 The code is available under the BSD 3-Clause license in [`LICENSE`](LICENSE).
