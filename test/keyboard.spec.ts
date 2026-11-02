@@ -157,7 +157,7 @@ test('keyboard only: a full offline incident, from the first Tab to a vote and a
   );
   await placeTwoBreakers(page);
   await expect(page.getByLabel('Local selected breakers')).toHaveText(
-    'identity, pricing',
+    `${label('identity')}, ${label('pricing')}`,
   );
   // The focus ring is drawn on the canvas and follows keyboard focus.
   await expect.poll(() => ringPixels(page, 'geo')).toBeGreaterThan(20);
@@ -187,7 +187,7 @@ test('keyboard only: a full offline incident, from the first Tab to a vote and a
     'Protect dashboards: 7 votes',
   );
   await page.keyboard.press('Enter');
-  await expect(page.getByLabel('Local vote')).toHaveText('protect-dashboards');
+  await expect(page.getByLabel('Local vote')).toHaveText('Protect dashboards');
   await expect(page.locator(':focus')).toHaveAttribute('aria-pressed', 'true');
   await expect(announcer(page)).toHaveText(
     'Local vote recorded. No community data was changed.',

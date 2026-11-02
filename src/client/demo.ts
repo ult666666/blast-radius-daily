@@ -2,6 +2,7 @@ import './demo.css';
 import './game';
 import { getDemoSnapshot, subscribeDemoState } from './api';
 import { parseDemoDay } from './demo-state';
+import { PROTOCOLS } from '../shared/game';
 import type { DemoView } from './demo-events';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,14 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const { session, lastOutcome, deleted } = getDemoSnapshot();
       day.value = session.puzzle.day;
       output('Local incident day', session.puzzle.day);
-      output('Local selected breakers', view.selectedIds?.join(', ') || 'None');
+      // Name assets and protocols as the map does, not by their internal ids.
+      const label = (id: string) =>
+        session.puzzle.nodes.find((node) => node.id === id)?.label ?? id;
+      output(
+        'Local selected breakers',
+        view.selectedIds?.map(label).join(', ') || 'None',
+      );
       output('Local score', lastOutcome ? String(lastOutcome.score) : 'None');
       output(
         'Local best score',
         session.bestScore === null ? 'None' : String(session.bestScore),
       );
       output('Local streak', String(session.streak));
-      output('Local vote', session.selectedProtocol || 'None');
+      output(
+        'Local vote',
+        PROTOCOLS.find((p) => p.id === session.selectedProtocol)?.label ?? 'None',
+      );
       output(
         'Synthetic vote totals',
         session.protocolVotes.map((v) => v.count).join(', '),
