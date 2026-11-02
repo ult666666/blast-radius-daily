@@ -248,6 +248,19 @@ test('reduced motion: the cascade shows its end state at once and still announce
   await context.close();
 });
 
+test('reduced motion: the launch screen in the feed stops its pulsing status dot', async ({
+  page,
+}) => {
+  await page.goto('/src/client/splash.html');
+  const dot = page.locator('.status-dot');
+  const animations = () =>
+    dot.evaluate((element) => element.getAnimations().length);
+  // Without a preference the dot pulses, so the check below can see an animation.
+  expect(await animations()).toBe(1);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await animations()).toBe(0);
+});
+
 test('axe finds no violations on the offline board or result, and the local harness plays by keyboard', async ({
   page,
 }) => {
