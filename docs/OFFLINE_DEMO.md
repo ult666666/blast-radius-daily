@@ -9,7 +9,7 @@ The build also writes `dist-demo/manifest.json`: SHA-256, byte length, source co
 1. Start on the July 14, 2026 fixture or choose a real UTC date with **Load day**.
 2. Click two `◆` candidates within the real game's two-token budget. Click again to remove a breaker.
 3. Trigger the change and watch the existing Phaser failure cascade. The shared deterministic engine computes the result; the offline host does not accept an arbitrary numeric score.
-4. Review the result and the native **This local run** summary. Replay can improve your best score without creating extra responders or increasing the fixture streak again.
+4. Review the result and the native **This local run** summary. Replay can improve your best score without creating extra responders or increasing the sample streak again.
 5. Vote for a protocol, repeat the same vote, then switch it. One local vote moves between the three fictional background totals.
 6. Press the privacy control once to arm it; a second press deletes your local contribution. The background fictional players remain. Replay starts with no personal score/vote/streak; completing a new run gives streak 1.
 7. Reload to reset the entire sample. No localStorage, cookies or account-linked storage are written. A copy of this HTML remains playable offline.

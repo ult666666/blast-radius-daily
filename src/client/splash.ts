@@ -21,7 +21,7 @@ if (episode) {
 }
 if (greeting) {
   const username = context?.username;
-  greeting.textContent = username ? `u/${username}, YOU'RE ON CALL` : 'INCIDENT COMMAND';
+  greeting.textContent = username ? `u/${username}, you’re on call` : 'Today’s map';
 }
 
 startButton.addEventListener('click', (event) => {

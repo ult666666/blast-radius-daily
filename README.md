@@ -2,111 +2,148 @@
 
 [![CI](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml/badge.svg)](https://github.com/ult666666/blast-radius-daily/actions/workflows/ci.yml)
 
-**[Play the offline demo](https://ult666666.github.io/projects/blast-radius-demo.html)** in a desktop browser. It runs the real puzzle engine with fictional community data and needs no Reddit account.
+A one-minute daily puzzle about data lineage, built as a Reddit app with Devvit and Phaser.
+Everyone in a subreddit gets the same dependency map and the same breaking schema change. You
+spend two tokens on circuit breakers, trigger the change and watch the failure spread through
+the graph; the goal is to save the most valuable dashboards, models, alerts and exports.
 
-Blast Radius Daily is a one-minute community puzzle that turns data lineage into a dramatic daily incident. Everyone in a subreddit receives the same dependency map and the same breaking schema change. Players spend two circuit-breaker tokens, trigger the deploy, and watch the failure cascade through the graph. The goal is to preserve the highest-value dashboards, models, alerts, and exports.
+**[Play the offline demo](https://ult666666.github.io/projects/blast-radius-demo.html)** in a
+desktop browser. It runs the same puzzle engine with sample community data and needs no Reddit
+account. No public Reddit post is linked yet.
 
 ![Blast Radius Daily lineage puzzle with two circuit breakers selected](assets/screenshots/01-lineage-board.png)
 
-The game is designed for Reddit communities that enjoy engineering, systems thinking, optimization, or daily collaborative challenges. It runs inside a Reddit post as a Devvit app and is built for desktop and landscape-tablet play. The current 1100×720 board is not presented as a narrow portrait-phone experience. The game does not require an external account, external server, payment, or API key. No public Reddit post is linked yet, so the offline demo above is the way to play it.
-
-![Blast Radius Daily incident result, community meter, leaderboard, and tomorrow-protocol vote](assets/screenshots/02-incident-result.png)
-
-Every completed run contributes to a subreddit-wide containment meter and a daily leaderboard. A streak rewards returning players. After playing, each responder can vote for tomorrow's community protocol; the winning protocol makes dashboards, models, or external-edge assets 50% more valuable in the next puzzle.
-
-Important operational notes:
-
-- Daily puzzles are deterministic and reset at 00:00 UTC.
-- Scores and protocol votes live only in Reddit Devvit Redis, namespaced to the subreddit installation.
-- The server recalculates every submitted result; the client cannot submit an arbitrary score.
-- The app makes no external HTTP requests and does not use advertising, payments, tracking pixels, generative AI, or third-party data.
-- Score sharing is off by default. If Reddit approves it and the developer enables it, sharing remains optional, separate from gameplay, bound to the exact visible draft, and limited to one attempt per player per day.
-
 ## How to play
 
-1. Open the Blast Radius Daily post and select **Enter incident**.
+1. Open the Blast Radius Daily post and select **Play today's incident**.
 2. Read the breaking change and today's community protocol.
-3. Tap or click a node marked with `◆` to place a circuit breaker. The small number beside the symbol is its token cost. With a keyboard, press Tab to reach the map, move between assets with the arrow keys, and press Space or Enter to place or remove a breaker.
-4. Spend no more than two tokens. You may remove and replace breakers before deploying.
-5. Select **Trigger the change**, or press D while on the map.
-6. Watch the red failure pulses move through unprotected lineage paths. Saved assets turn green.
-7. Review the score, daily rank, saved critical endpoints, and community containment meter.
-8. Optionally vote for tomorrow's protocol.
-9. If score sharing has been approved and enabled, optionally select **Post score as u/yourname**. The full comment is visible before that separate button. Playing, scoring, and voting never require a comment.
-10. Use the two-step **Delete my saved game data** privacy control at any time to remove your score, responder state, vote, streak, and pending share draft from app storage.
+3. Click or tap an asset marked `◆` to place a circuit breaker; the number next to `◆` is its
+   token cost. With a keyboard, Tab to the map, move with the arrow keys and press Space or
+   Enter to place or remove a breaker.
+4. Spend up to two tokens. You can remove and move breakers before you deploy.
+5. Select **Trigger the change**, or press D on the map. Red pulses show the failure spreading
+   through unprotected paths, and saved assets turn green.
+6. Review your score, your daily rank, the critical endpoints you saved and the community
+   meter. You can then vote for tomorrow's protocol.
 
-There may be more than one optimal cut. The server awards a 1,000-point optimization bonus whenever a selection reaches the best score possible for that day's graph and protocol.
+A day can have more than one best cut. Any selection that reaches the best possible score for
+that day's map and protocol earns a 1,000-point bonus.
 
-## Community features
+![Blast Radius Daily result screen with the score, community meter, leaderboard and protocol vote](assets/screenshots/02-incident-result.png)
 
-- **Shared daily map:** every player in the subreddit solves the same incident.
-- **Daily leaderboard:** the eight highest validated scores are shown in rank order.
-- **Return streak:** consecutive UTC-day participation builds a visible streak.
-- **Containment meter:** unique daily responders collectively fill a 25-player goal.
-- **Tomorrow protocol vote:** responders choose which asset class receives extra weight in the next puzzle.
-- **Review-gated incident comment:** after Reddit approval only, an explicit optional action can reply once to a verified sticky command comment with the exact previewed score summary.
+## What it does
+
+- Everyone in a subreddit solves the same map. Puzzles are deterministic and reset at 00:00 UTC.
+- The server recomputes every result from the selected breakers, so a client cannot submit a
+  score of its own.
+- A daily leaderboard shows the eight highest scores, and consecutive days build a streak.
+- A containment meter fills toward a goal of 25 players each day.
+- Players vote for tomorrow's protocol: the winning asset class (dashboards, models or external
+  edges) is worth 50% more in the next puzzle.
+- After a game, a player can post a score comment, but only once Reddit approves the permission
+  and the developer turns it on. The comment shows in full before the separate post button, it
+  replies to the post's pinned command comment, and each player can post once a day.
+- A two-step **Delete my saved game data** control removes the player's score, responder state,
+  vote, streak and pending comment draft at any time.
+
+The app makes no external HTTP requests and has no ads, payments, tracking pixels, generative AI
+or third-party data.
+
+## Accessibility
+
+The whole game works from the keyboard. Tab reaches the map as one stop; Up and Down move
+through the assets in reading order, Left and Right jump to the next column, and Home and End go
+to the first and last asset. Space or Enter places or removes a breaker, D triggers the change,
+and Tab moves on to the Trigger button and out of the game, so focus is never trapped. A white
+ring with a dark edge shows the focused asset on the canvas.
+
+For screen readers, a visually hidden list mirrors the canvas: each asset with its type, value,
+dependencies, breaker cost and, after the change, whether it failed or was saved. A polite live
+region announces each breaker, the tokens left, the cascade result and the score. The result
+screen mirrors the score, the leaderboard and every button. With reduced motion requested, the
+cascade appears at once, and the pulses, camera shake, fades and hover scaling are off. Status
+colors always come with text or symbols, and scoring never depends on reaction speed. The launch
+screen in the feed has its own mobile layout and does not trap scrolling.
+
+[docs/OFFLINE_DEMO.md](docs/OFFLINE_DEMO.md) describes keyboard play and the tests that check it.
+
+## Data and privacy
+
+The game stores only what its mechanics need, all in the subreddit installation's Devvit Redis
+namespace:
+
+| Data | Kept for |
+| --- | --- |
+| Reddit username, validated score and daily responder state | 8 days after the day's last update (under 9 days from that day's first activity) |
+| Protocol vote | The same daily window |
+| Last day played and streak | Up to 30 days |
+| A pending score-comment draft | The same daily window, and deleted once used |
+| A posted score comment | Normal Reddit comment deletion and reporting rules |
+
+Nothing is sent to an external service. The app does not read private messages, browsing
+history, email addresses, precise location or other posts and comments. Players cannot enter
+free text; votes are three fixed choices. Deleting the post or its command comment removes the
+routing data stored for them.
+
+The score comment stays disabled until Reddit approves the user-action permission for the
+installed version and the developer enables it. When enabled, the app checks that its command
+comment is pinned when the post is created and again right before posting, and it posts only the
+exact one-time draft the player saw.
+
+Devvit Web 0.15.1 has no `AccountDelete` trigger, so the app cannot react when a Reddit account
+is deleted. It relies on short retention and the in-game deletion control instead.
 
 ## Moderator setup
 
-Requirements: a Reddit account connected to Devvit, a test or destination subreddit you moderate, and Node.js 22.12 or newer (the Vite 8 build-tool floor).
+You need a Reddit account connected to Devvit, a test or destination subreddit you moderate, and
+Node.js 22.12 or newer (the Vite 8 floor).
 
 1. Create or select a Devvit app at <https://developers.reddit.com/new> using the Phaser template.
-2. Make sure the registered app name matches the `name` in `devvit.json`. This build uses the unique slug `blast-radius-daily`.
+2. Make sure the registered app name matches `name` in `devvit.json`. This build uses the slug
+   `blast-radius-daily`.
 3. Install dependencies with `npm ci`.
 4. Sign in with `npm run login`.
-5. Set the test subreddit when prompted, or run with `DEVVIT_SUBREDDIT=your_test_subreddit npm run dev`.
-6. Playtest on desktop and a landscape touch viewport. Installation creates the first daily post automatically. Narrow portrait phones are outside this version's stated support.
-7. Moderators can create another daily post from **Create today's Blast Radius post** in the subreddit menu.
+5. Set the test subreddit when prompted, or run `DEVVIT_SUBREDDIT=your_test_subreddit npm run dev`.
+6. Playtest on a desktop and on a landscape touch screen. Installing the app creates the first
+   daily post.
+7. Moderators can create another daily post with **Create today's Blast Radius post** in the
+   subreddit menu.
 8. Upload a private build with `npm run deploy`.
-9. Keep the global `score_sharing_approved` setting off during playtest and review. Enable it only after Reddit approves `SUBMIT_COMMENT` for the installed version.
+9. Keep the global `score_sharing_approved` setting off during playtest and review. Turn it on
+   only after Reddit approves `SUBMIT_COMMENT` for the installed version.
 10. When the app and README are final, submit it for Reddit review with `npm run launch`.
 
-The menu action and installation trigger create a custom post plus a command comment. Score sharing is available only when the app verifies that comment is sticky at creation and again immediately before posting; otherwise the share control is disabled.
+The menu action and the install trigger create a custom post and a command comment. The full
+server workflow can only be tested with `devvit playtest`, because Reddit context, Redis and user
+actions exist only inside Devvit.
 
-## Developer setup and verification
+## Development
 
 ```bash
 npm ci
 npm run verify
 ```
 
-`npm run verify` performs strict TypeScript checking, ESLint, deterministic engine/demo-state tests, the production Devvit build and the standalone offline build. CI runs these steps on Node 22 and 24. A separate Chromium job plays the actual offline canvas journeys.
+`npm run verify` runs strict TypeScript checking, ESLint, the engine and demo-state tests, the
+production Devvit build and the offline build. CI runs it on Node 22 and 24, and a separate job
+plays the offline game in Chromium.
 
-### Play without Reddit or a server
+To build and play the offline demo without Reddit or a server:
 
 ```bash
 npm ci --ignore-scripts
 npm run build:demo
-```
-
-Open `dist-demo/blast-radius-demo.html` directly in a modern desktop browser. The single file includes its code, styles and license notices, so it works with the browser offline. It defaults to the fixed July 14, 2026 fixture; the native date selector loads another deterministic day. [Offline workflow and verification](docs/OFFLINE_DEMO.md) describes the state, artifacts and limits.
-
-All names, ranks, streaks, community totals and votes in this demo are fictional fixtures. Your changes live only in the tab's memory. Voting transfers one vote, replay retains the best score, and two-step deletion clears your synthetic contribution. Reload resets the sample. Comments are unavailable; no Reddit credentials, APIs or storage are used.
-
-To verify the complete flow yourself:
-
-```bash
 npx playwright install chromium --only-shell
 npm run test:demo
 ```
 
-The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Three keyboard journeys never touch the mouse: one plays a full incident, a vote and a replay offline, one repeats the cascade with reduced motion, and one plays the Devvit game page (`game.html?demo=1`) through the local Vite preview. A fourth test opens the feed launch screen through the same preview and checks that its pulsing status dot stops under reduced motion. That preview listens on 127.0.0.1 port 4175 during the run; set `BLAST_PREVIEW_PORT` to move it. axe-core 4.14.0, pinned as a development dependency, scans the board and result screens on both pages. Screenshots and failure traces are retained under `.demo-results/`.
+`dist-demo/blast-radius-demo.html` is a single file with its code, styles and license notices,
+so it also works offline from disk. It starts on the July 14, 2026 puzzle, and the date picker
+loads any other day. `npm run test:demo` plays it in Chromium by mouse and by keyboard and scans
+it with axe-core; [docs/OFFLINE_DEMO.md](docs/OFFLINE_DEMO.md) lists each journey.
 
-The existing Vite visual preview remains available for development:
-
-```bash
-npm run preview:local
-```
-
-Then open:
-
-```text
-http://127.0.0.1:4174/src/client/game.html?demo=1&day=2026-07-14
-```
-
-The full server workflow must be tested through `devvit playtest`, because Reddit context, Redis, and user actions are only available inside Devvit.
-
-## Architecture
+For a live development preview, run `npm run preview:local` and open
+`http://127.0.0.1:4174/src/client/game.html?demo=1&day=2026-07-14`.
 
 ```text
 Reddit custom post
@@ -122,42 +159,29 @@ Reddit custom post
 Devvit Web server (Hono) ───────┴─ Devvit Redis + Reddit API
 ```
 
-The puzzle engine in `src/shared/game.ts` is deterministic and shared by the Phaser client and server. The server never accepts a client-provided numeric score.
+The puzzle engine in `src/shared/game.ts` is deterministic and shared by the Phaser client and
+the server.
 
-## Data, privacy, and safety
+## Limits
 
-Blast Radius Daily stores only the minimum data required for its game mechanics:
-
-- Reddit username, validated score, and daily responder state: daily keys expire 8 days after their final update (less than 9 days from the earliest activity in that UTC day).
-- Structured protocol vote: the same daily-key window, always under 9 days.
-- Last-played day and streak count: up to 30 days.
-- A pending exact-text share draft: the same daily-key window and deleted after use.
-- Native score comment: only when the feature is approved and enabled and the player presses the explicitly labeled post button; the comment follows normal Reddit deletion and reporting controls.
-
-The app also contains a fail-closed score-comment flow. It stays disabled until Reddit approves user-action permissions for the current version and the developer explicitly enables it. When enabled, it requires a verified sticky command comment and posts only the exact one-time server draft shown to the player.
-
-All game state is stored inside the subreddit installation's Devvit Redis namespace. Nothing is sent to an external service. The app does not read private messages, browsing history, email addresses, precise location, or content from other posts and comments. It does not permit free-form in-app content, so protocol contributions are limited to three safe predefined choices. Expiring keys remove account-linked state within 30 days, while the result screen provides an immediate two-step deletion control. Post and command-comment deletion triggers remove their stored routing metadata.
-
-Devvit Web 0.15.1 does not expose an `AccountDelete` trigger in `devvit.json`, so the app cannot receive an immediate platform event when a Reddit account itself is deleted. Until that capability exists, the build minimizes retention, provides immediate user-initiated deletion, and does not claim event-driven account-deletion handling.
-
-## Accessibility and device support
-
-- **Keyboard play.** Every step works without a mouse. Tab reaches the map as one stop; Up and Down move through the assets in reading order (column by column), Left and Right jump to the nearest asset in the next column, Home and End go to the first and last. Space or Enter places or removes a breaker, D triggers the change, and Tab continues to the Trigger button and out of the game, so focus is never trapped. On the result screen, Tab reaches the vote, replay, share and privacy buttons.
-- **Visible focus.** The canvas draws a 4px white ring with a dark edge around the focused asset or button, and the ring follows focus.
-- **Screen readers.** A visually hidden mirror next to the canvas lists every asset as an option in a multi-select list: its name, type, value (and its value under today's protocol), what it depends on, what it feeds, its breaker cost and, after the deploy, whether it failed or was saved. The result screen mirrors the score, the facts, the leaderboard and the same buttons. The canvas itself is hidden from assistive technology, so nothing is read twice.
-- **Announcements.** A polite live region reports each breaker placed or removed with the tokens left, refused placements, the cascade result (failed and saved assets, containment) and the score, as well as votes and deletion steps.
-- **Reduced motion.** With `prefers-reduced-motion: reduce`, the cascade shows its final state at once instead of moving pulses, and camera shake, fades, the loading pulse, the launch screen's pulsing status dot and hover scaling are off.
-- High-contrast status colors are paired with text and symbols rather than used alone.
-- The Phaser canvas preserves a stable 1100×720 composition and scales to desktop or landscape-tablet expanded views.
-- The inline launch screen has a separate mobile layout and does not trap feed scrolling.
-- Animations communicate state but scoring does not depend on reaction speed.
-
-Limits: keyboard and screen-reader support is checked with Playwright in Chromium and with axe-core; it has not been tested with a physical screen reader such as NVDA, JAWS or VoiceOver, or inside Reddit's apps. The Devvit game page keeps its existing `user-scalable=no` viewport, so axe's `meta-viewport` rule is skipped on that page only; desktop browser zoom still works. Narrow portrait-phone gameplay is a documented limitation of this version rather than an unsupported responsiveness claim.
+- The 1100×720 board is built for desktop and landscape tablets; narrow portrait phones are not
+  supported.
+- Keyboard and screen-reader play is tested in Chromium with Playwright and axe-core, not with a
+  physical screen reader such as NVDA, JAWS or VoiceOver, and not inside Reddit's apps.
+- The Devvit game page keeps its `user-scalable=no` viewport, so the tests skip axe's
+  `meta-viewport` rule on that page only; desktop browser zoom still works.
+- The offline demo does not cover Reddit installation, Redis storage, live community activity or
+  score comments.
 
 ## Support
 
-For app issues, contact Charles Dai at `charles@madebymotionx.com` or [open an issue in this repository](https://github.com/ult666666/blast-radius-daily/issues).
+For app issues, contact Charles Dai at `charles@madebymotionx.com` or
+[open an issue](https://github.com/ult666666/blast-radius-daily/issues).
 
 ## Credits and license
 
-Built with the official Reddit Devvit Phaser starter, Phaser 4, Vite, Hono, and TypeScript. All game design, copy, visual treatment, graphs, and puzzle data in this repository are original and programmatically rendered. The code is available under the BSD 3-Clause license in `LICENSE`.
+Built with the official Reddit Devvit Phaser starter, Phaser 4, Vite, Hono and TypeScript. The
+game design, copy, visual treatment, graphs and puzzle data in this repository are original and
+drawn in code. Built with AI coding assistants; I reviewed the code and the tests that check it.
+
+The code is available under the BSD 3-Clause license in [`LICENSE`](LICENSE).

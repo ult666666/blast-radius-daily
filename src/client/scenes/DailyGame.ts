@@ -20,6 +20,7 @@ import {
   drawBackdrop,
   drawFocusRing,
   drawPanel,
+  sentenceCase,
 } from '../theme';
 
 type NodeState = 'default' | 'selected' | 'failed' | 'saved';
@@ -51,8 +52,8 @@ export class DailyGame extends Scene {
     this.events.once(Scenes.Events.SHUTDOWN, () => this.releaseMirror());
     drawBackdrop(this);
     this.add
-      .text(550, 330, 'LOADING TODAY\'S LINEAGE MAP…', {
-        fontFamily: FONT,
+      .text(550, 330, 'Loading today’s map…', {
+        fontFamily: SANS,
         fontSize: '15px',
         color: COLORS.cyanText,
       })
@@ -88,8 +89,8 @@ export class DailyGame extends Scene {
       this.children.removeAll(true);
       drawBackdrop(this);
       drawPanel(this, 245, 220, 610, 260);
-      addKicker(this, 285, 255, 'CONNECTION INTERRUPTED', COLORS.coralText);
-      this.add.text(285, 290, 'THE INCIDENT MAP COULD NOT LOAD', {
+      addKicker(this, 285, 255, 'Connection problem', COLORS.coralText);
+      this.add.text(285, 290, 'The incident map could not load', {
         fontFamily: SANS,
         fontSize: '28px',
         fontStyle: 'bold',
@@ -106,7 +107,7 @@ export class DailyGame extends Scene {
         y: 430,
         width: 200,
         height: 44,
-        label: 'RETRY CONNECTION',
+        label: 'Retry connection',
         onPress: () => this.scene.restart(),
       });
       const message = error instanceof Error ? error.message : 'Unknown error';
@@ -148,16 +149,16 @@ export class DailyGame extends Scene {
     this.add.rectangle(550, 36, 1100, 72, 0x071522, 0.97);
     this.add.rectangle(550, 72, 1100, 1, COLORS.grid, 1);
     this.add
-      .text(22, 18, 'BLAST / RADIUS', {
+      .text(22, 16, 'Blast Radius', {
         fontFamily: SANS,
         fontSize: '23px',
         fontStyle: 'bold',
         color: COLORS.ink,
       })
-      .setLetterSpacing(-1);
-    this.add.text(22, 47, `DAILY INCIDENT #${session.puzzle.episode}`, {
-      fontFamily: FONT,
-      fontSize: '10px',
+      .setLetterSpacing(-0.5);
+    this.add.text(22, 46, `Daily incident #${session.puzzle.episode}`, {
+      fontFamily: SANS,
+      fontSize: '12px',
       color: COLORS.cyanText,
     });
     this.add
@@ -168,11 +169,16 @@ export class DailyGame extends Scene {
       })
       .setOrigin(1, 0);
     this.add
-      .text(1078, 44, `${session.streak} DAY STREAK  ·  BEST ${session.bestScore ?? '—'}`, {
-        fontFamily: FONT,
-        fontSize: '9px',
-        color: COLORS.muted,
-      })
+      .text(
+        1078,
+        44,
+        `${session.streak}-day streak · ${session.bestScore === null ? 'no best score yet' : `best ${session.bestScore}`}`,
+        {
+          fontFamily: SANS,
+          fontSize: '12px',
+          color: COLORS.muted,
+        }
+      )
       .setOrigin(1, 0);
 
     drawPanel(this, 18, 86, 765, 615, 0.93);
@@ -181,20 +187,20 @@ export class DailyGame extends Scene {
       this.drawNode(node);
     }
 
-    addKicker(this, 38, 100, `${session.puzzle.system} / LIVE LINEAGE`);
-    this.add.text(38, 118, 'Click shieldable nodes or use the keyboard: Tab, arrows, Space to place, D to deploy.', {
+    addKicker(this, 38, 98, `Lineage map: ${sentenceCase(session.puzzle.system)}`);
+    this.add.text(38, 118, 'Click an asset marked ◆, or use the keyboard: Tab, arrow keys, Space to place, D to deploy.', {
       fontFamily: SANS,
       fontSize: '12px',
       color: COLORS.muted,
     });
-    this.add.text(38, 678, '◆ breaker candidate    ● critical endpoint    red paths fail after deploy', {
-      fontFamily: FONT,
-      fontSize: '9px',
+    this.add.text(38, 676, '◆ can hold a breaker     ● critical endpoint     red paths fail after the change', {
+      fontFamily: SANS,
+      fontSize: '11px',
       color: COLORS.muted,
     });
 
     drawPanel(this, 800, 86, 282, 615, 0.98);
-    addKicker(this, 824, 110, `TODAY / ${session.puzzle.day}`);
+    addKicker(this, 824, 108, `Today, ${session.puzzle.day}`);
     this.add.text(824, 133, session.puzzle.title, {
       fontFamily: SANS,
       fontSize: '24px',
@@ -202,7 +208,7 @@ export class DailyGame extends Scene {
       color: COLORS.ink,
       wordWrap: { width: 232 },
     });
-    addKicker(this, 824, 201, 'BREAKING CHANGE', COLORS.coralText);
+    addKicker(this, 824, 199, 'Breaking change', COLORS.coralText);
     this.add.text(824, 221, session.puzzle.change, {
       fontFamily: FONT,
       fontSize: '14px',
@@ -220,22 +226,22 @@ export class DailyGame extends Scene {
       wordWrap: { width: 232 },
     });
 
-    addKicker(this, 824, 403, 'COMMUNITY PROTOCOL', COLORS.amberText);
-    this.add.text(824, 424, session.puzzle.protocolLabel.toUpperCase(), {
-      fontFamily: FONT,
-      fontSize: '11px',
+    addKicker(this, 824, 401, 'Community protocol', COLORS.amberText);
+    this.add.text(824, 424, session.puzzle.protocolLabel, {
+      fontFamily: SANS,
+      fontSize: '13px',
       fontStyle: 'bold',
       color: COLORS.amberText,
       wordWrap: { width: 230 },
     });
-    this.add.text(824, 450, 'Today, that asset class is worth 50% more.', {
+    this.add.text(824, 448, 'Today, that asset class is worth 50% more.', {
       fontFamily: SANS,
-      fontSize: '11px',
+      fontSize: '12px',
       color: COLORS.muted,
       wordWrap: { width: 225 },
     });
 
-    addKicker(this, 824, 496, 'CIRCUIT BREAKER BUDGET');
+    addKicker(this, 824, 494, 'Breaker tokens');
     this.budgetText = this.add.text(824, 518, '', {
       fontFamily: FONT,
       fontSize: '20px',
@@ -244,7 +250,7 @@ export class DailyGame extends Scene {
     });
     this.statusText = this.add.text(824, 555, 'Choose your cuts, then trigger the change.', {
       fontFamily: SANS,
-      fontSize: '11px',
+      fontSize: '12px',
       color: COLORS.muted,
       wordWrap: { width: 232 },
     });
@@ -253,7 +259,7 @@ export class DailyGame extends Scene {
       y: 653,
       width: 234,
       height: 48,
-      label: 'TRIGGER THE CHANGE  →',
+      label: 'Trigger the change →',
       color: COLORS.coral,
       textColor: '#ffffff',
       onPress: () => this.runSimulation(),
@@ -340,9 +346,9 @@ export class DailyGame extends Scene {
       })
       .setOrigin(0.5);
     const kind = this.add
-      .text(0, 12, node.kind.toUpperCase(), {
+      .text(0, 12, node.kind, {
         fontFamily: FONT,
-        fontSize: '8px',
+        fontSize: '9px',
         color: COLORS.muted,
         align: 'center',
       })

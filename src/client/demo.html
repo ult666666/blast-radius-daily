@@ -5,36 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Play a deterministic data-lineage puzzle offline. Synthetic community fixtures, local in-memory state, no Reddit account or network required."
+      content="Play the Blast Radius Daily data-lineage puzzle offline, with sample community data and no Reddit account."
     />
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'none'; script-src data:; style-src 'unsafe-inline' data:; img-src data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
     />
     <meta name="blast-source-commit" content="{{SOURCE_COMMIT}}" />
-    <title>Blast Radius Daily — offline practice demo</title>
+    <title>Blast Radius Daily: offline demo</title>
     <!-- DEMO_STYLE -->
   </head>
   <body>
     <header>
-      <p>Blast Radius Daily · Offline practice</p>
-      <h1>Contain a schema-change cascade</h1>
+      <h1>Blast Radius Daily</h1>
       <p>
-        Play the real puzzle with fictional community figures. This file works
-        without a server or network. Your run, vote and deletion affect memory
-        in this tab only; reload resets the fixtures. Score comments are
-        unavailable.
+        A schema change is about to cascade through a data pipeline. Place up to
+        two circuit breakers on the map, then trigger the change and see which
+        dashboards, models and exports survive.
       </p>
       <p>
-        Choose up to two circuit breakers on the map, then trigger the change.
-        Best on desktop or a landscape tablet; narrow portrait gameplay is not
-        optimized.
+        This offline copy uses sample community data. Your run and vote stay in
+        this tab, and reloading resets them. It works best on a desktop or a
+        landscape tablet.
       </p>
       <p>
-        Keyboard: press Tab to reach the map, use the arrow keys to move between
-        assets, Space or Enter to place or remove a breaker, and D to trigger
-        the change. Screen readers read the map as a list of assets, and
-        announcements report breakers, tokens, the cascade and the score.
+        Keyboard: Tab to the map, arrow keys to move, Space or Enter to place or
+        remove a breaker, and D to trigger the change. Screen readers get the
+        map as a list of assets.
       </p>
       <form id="day-form">
         <label for="incident-day">Incident day (UTC)</label
@@ -76,7 +73,7 @@
           <dd><output aria-label="Local best score">None</output></dd>
         </div>
         <div>
-          <dt>Fixture streak</dt>
+          <dt>Sample streak</dt>
           <dd><output aria-label="Local streak">3</output></dd>
         </div>
         <div>
@@ -88,7 +85,7 @@
           <dd><output aria-label="Synthetic vote totals">7, 11, 5</output></dd>
         </div>
         <div>
-          <dt>Fixture community</dt>
+          <dt>Sample community</dt>
           <dd>
             <output aria-label="Local responders">18 / 25 (synthetic)</output>
           </dd>
@@ -101,20 +98,19 @@
     </main>
     <footer>
       <p>
-        This demo does not test Reddit installation, Redis storage, live
-        community activity or comment permissions. The game canvas takes a
-        mouse, touch or keyboard; the date selector and local summary are native
-        HTML.
+        The demo does not cover Reddit installation, Redis storage, live
+        community activity or score comments.
       </p>
       <p>
         <a href="https://github.com/ult666666/blast-radius-daily"
-          >Source and full setup</a
+          >Source on GitHub</a
         >
         ·
         <a
           href="https://ult666666.github.io/projects/catalog.html#blast-radius-daily"
           >Project explorer</a
         >
+        · BSD 3-Clause License
       </p>
       <details>
         <summary>Source and bundled licenses</summary>

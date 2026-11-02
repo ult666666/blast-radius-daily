@@ -8,7 +8,7 @@ Show the game post in the Reddit feed and the custom inline launch card.
 
 On-screen caption: `ONE SHARED DATA DISASTER. EVERY DAY.`
 
-Select **Enter incident**.
+Select **Play today's incident**.
 
 ## 0:05–0:14 — The incident
 
