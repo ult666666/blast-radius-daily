@@ -26,9 +26,9 @@ Important operational notes:
 
 1. Open the Blast Radius Daily post and select **Enter incident**.
 2. Read the breaking change and today's community protocol.
-3. Tap or click a node marked with `◆` to place a circuit breaker. The small number beside the symbol is its token cost.
+3. Tap or click a node marked with `◆` to place a circuit breaker. The small number beside the symbol is its token cost. With a keyboard, press Tab to reach the map, move between assets with the arrow keys, and press Space or Enter to place or remove a breaker.
 4. Spend no more than two tokens. You may remove and replace breakers before deploying.
-5. Select **Trigger the change**.
+5. Select **Trigger the change**, or press D while on the map.
 6. Watch the red failure pulses move through unprotected lineage paths. Saved assets turn green.
 7. Review the score, daily rank, saved critical endpoints, and community containment meter.
 8. Optionally vote for tomorrow's protocol.
@@ -90,7 +90,7 @@ npx playwright install chromium --only-shell
 npm run test:demo
 ```
 
-The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Screenshots and failure traces are retained under `.demo-results/`.
+The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Three keyboard journeys never touch the mouse: one plays a full incident, a vote and a replay offline, one repeats the cascade with reduced motion, and one plays the Devvit game page (`game.html?demo=1`) through the local Vite preview. That preview listens on 127.0.0.1 port 4175 during the run; set `BLAST_PREVIEW_PORT` to move it. axe-core 4.14.0, pinned as a development dependency, scans the board and result screens on both pages. Screenshots and failure traces are retained under `.demo-results/`.
 
 The existing Vite visual preview remains available for development:
 
@@ -142,12 +142,17 @@ Devvit Web 0.15.1 does not expose an `AccountDelete` trigger in `devvit.json`, s
 
 ## Accessibility and device support
 
+- **Keyboard play.** Every step works without a mouse. Tab reaches the map as one stop; Up and Down move through the assets in reading order (column by column), Left and Right jump to the nearest asset in the next column, Home and End go to the first and last. Space or Enter places or removes a breaker, D triggers the change, and Tab continues to the Trigger button and out of the game, so focus is never trapped. On the result screen, Tab reaches the vote, replay, share and privacy buttons.
+- **Visible focus.** The canvas draws a 4px white ring with a dark edge around the focused asset or button, and the ring follows focus.
+- **Screen readers.** A visually hidden mirror next to the canvas lists every asset as an option in a multi-select list: its name, type, value (and its value under today's protocol), what it depends on, what it feeds, its breaker cost and, after the deploy, whether it failed or was saved. The result screen mirrors the score, the facts, the leaderboard and the same buttons. The canvas itself is hidden from assistive technology, so nothing is read twice.
+- **Announcements.** A polite live region reports each breaker placed or removed with the tokens left, refused placements, the cascade result (failed and saved assets, containment) and the score, as well as votes and deletion steps.
+- **Reduced motion.** With `prefers-reduced-motion: reduce`, the cascade shows its final state at once instead of moving pulses, and camera shake, fades, the loading pulse and hover scaling are off.
 - High-contrast status colors are paired with text and symbols rather than used alone.
-- Interactive nodes and buttons are designed for mouse input and landscape touch layouts.
 - The Phaser canvas preserves a stable 1100×720 composition and scales to desktop or landscape-tablet expanded views.
 - The inline launch screen has a separate mobile layout and does not trap feed scrolling.
 - Animations communicate state but scoring does not depend on reaction speed.
-- Narrow portrait-phone gameplay is a documented limitation of this version rather than an unsupported responsiveness claim.
+
+Limits: keyboard and screen-reader support is checked with Playwright in Chromium and with axe-core; it has not been tested with a physical screen reader such as NVDA, JAWS or VoiceOver, or inside Reddit's apps. The Devvit game page keeps its existing `user-scalable=no` viewport, so axe's `meta-viewport` rule is skipped on that page only; desktop browser zoom still works. Narrow portrait-phone gameplay is a documented limitation of this version rather than an unsupported responsiveness claim.
 
 ## Support
 

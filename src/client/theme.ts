@@ -125,3 +125,28 @@ export function addKicker(
     color,
   });
 }
+
+export type FocusRect = { x: number; y: number; width: number; height: number };
+
+/** The canvas area of a centred button, with room for a focus ring around it. */
+export function buttonRect(x: number, y: number, width: number, height: number): FocusRect {
+  return { x: x - width / 2 - 7, y: y - height / 2 - 7, width: width + 14, height: height + 14 };
+}
+
+/**
+ * Keyboard focus on the canvas: a 4px white ring with a dark outer edge, so it stays
+ * visible on dark panels, cyan selections and coral failures alike.
+ */
+export function drawFocusRing(graphics: GameObjects.Graphics | null, rect: FocusRect | null): void {
+  if (!graphics?.active) {
+    return;
+  }
+  graphics.clear();
+  if (!rect) {
+    return;
+  }
+  graphics.lineStyle(8, COLORS.background, 1);
+  graphics.strokeRoundedRect(rect.x - 3, rect.y - 3, rect.width + 6, rect.height + 6, 15);
+  graphics.lineStyle(4, COLORS.white, 1);
+  graphics.strokeRoundedRect(rect.x, rect.y, rect.width, rect.height, 13);
+}

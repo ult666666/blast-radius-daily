@@ -1,6 +1,8 @@
-import { GameObjects, Scene } from 'phaser';
+import { GameObjects, Scene, Scenes } from 'phaser';
 import { getSession, isDemoMode, submitScore } from '../api';
 import { reportDemoView } from '../demo-events';
+import { announce, mountBoard, mountMessage, prefersReducedMotion, type BoardMirror } from '../a11y';
+import { cascadeMessage, placementMessage, refusalMessage, type NodeStatus } from '../board-a11y';
 import type { SessionResponse } from '../../shared/api';
 import {
   evaluateShielding,
@@ -14,7 +16,9 @@ import {
   SANS,
   addButton,
   addKicker,
+  buttonRect,
   drawBackdrop,
+  drawFocusRing,
   drawPanel,
 } from '../theme';
 
@@ -34,12 +38,17 @@ export class DailyGame extends Scene {
   private statusText: GameObjects.Text | null = null;
   private runButton: GameObjects.Container | null = null;
   private running = false;
+  private mirror: { destroy: () => void } | null = null;
+  private board: BoardMirror | null = null;
+  private focusRing: GameObjects.Graphics | null = null;
+  private readonly statuses = new Map<string, NodeStatus>();
 
   constructor() {
     super('DailyGame');
   }
 
   create(): void {
+    this.events.once(Scenes.Events.SHUTDOWN, () => this.releaseMirror());
     drawBackdrop(this);
     this.add
       .text(550, 330, 'LOADING TODAY\'S LINEAGE MAP…', {
@@ -49,14 +58,16 @@ export class DailyGame extends Scene {
       })
       .setOrigin(0.5);
     const loader = this.add.circle(550, 380, 8, COLORS.cyan);
-    this.tweens.add({
-      targets: loader,
-      alpha: 0.15,
-      scale: 1.8,
-      duration: 680,
-      yoyo: true,
-      repeat: -1,
-    });
+    if (!prefersReducedMotion()) {
+      this.tweens.add({
+        targets: loader,
+        alpha: 0.15,
+        scale: 1.8,
+        duration: 680,
+        yoyo: true,
+        repeat: -1,
+      });
+    }
     void this.loadDailySession();
   }
 
@@ -98,13 +109,39 @@ export class DailyGame extends Scene {
         label: 'RETRY CONNECTION',
         onPress: () => this.scene.restart(),
       });
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      this.focusRing = this.add.graphics().setDepth(40);
+      this.releaseMirror();
+      this.mirror = mountMessage({
+        title: 'The incident map could not load',
+        message,
+        action: {
+          id: 'retry',
+          label: 'Retry connection',
+          rect: buttonRect(550, 430, 200, 44),
+          onPress: () => this.scene.restart(),
+        },
+        onFocusRect: (rect) => drawFocusRing(this.focusRing, rect),
+      });
+      announce(`The incident map could not load. ${message}`);
     }
+  }
+
+  private releaseMirror(): void {
+    this.mirror?.destroy();
+    this.mirror = null;
+    this.board = null;
+  }
+
+  private syncMirror(): void {
+    this.board?.sync({ selected: this.selected, statuses: this.statuses, running: this.running });
   }
 
   private renderSession(session: SessionResponse): void {
     this.children.removeAll(true);
     this.selected.clear();
     this.widgets.clear();
+    this.statuses.clear();
     this.running = false;
     drawBackdrop(this);
 
@@ -145,7 +182,7 @@ export class DailyGame extends Scene {
     }
 
     addKicker(this, 38, 100, `${session.puzzle.system} / LIVE LINEAGE`);
-    this.add.text(38, 118, 'Click shieldable nodes to place circuit breakers.', {
+    this.add.text(38, 118, 'Click shieldable nodes or use the keyboard: Tab, arrows, Space to place, D to deploy.', {
       fontFamily: SANS,
       fontSize: '12px',
       color: COLORS.muted,
@@ -221,6 +258,25 @@ export class DailyGame extends Scene {
       textColor: '#ffffff',
       onPress: () => this.runSimulation(),
     });
+    this.focusRing = this.add.graphics().setDepth(40);
+    this.releaseMirror();
+    this.board = mountBoard({
+      puzzle: session.puzzle,
+      rectForNode: (id) => {
+        const node = session.puzzle.nodes.find((candidate) => candidate.id === id);
+        return { x: (node?.x ?? 0) - 77, y: (node?.y ?? 0) - 37, width: 154, height: 74 };
+      },
+      deployRect: buttonRect(941, 653, 234, 48),
+      onToggle: (id) => {
+        const node = session.puzzle.nodes.find((candidate) => candidate.id === id);
+        if (node) {
+          this.toggleShield(node);
+        }
+      },
+      onDeploy: () => this.runSimulation(),
+      onFocusRect: (rect) => drawFocusRing(this.focusRing, rect),
+    });
+    this.mirror = this.board;
     this.updateBudget();
 
     const demoStage = new URLSearchParams(window.location.search).get('stage');
@@ -336,7 +392,7 @@ export class DailyGame extends Scene {
         .setSize(140, 60)
         .setInteractive({ useHandCursor: true })
         .on('pointerover', () => {
-          if (!this.running && !this.selected.has(node.id)) {
+          if (!this.running && !this.selected.has(node.id) && !prefersReducedMotion()) {
             container.setScale(1.035);
           }
           this.setStatus(`${node.label} · breaker cost ${node.shieldCost} · ${node.detail}`);
@@ -353,16 +409,26 @@ export class DailyGame extends Scene {
   }
 
   private toggleShield(node: AssetNode): void {
-    if (this.running || node.shieldCost === null || !this.session) {
+    if (this.running || !this.session) {
+      return;
+    }
+    const puzzle = this.session.puzzle;
+    if (node.shieldCost === null) {
+      announce(refusalMessage(puzzle, node, this.selected));
       return;
     }
     if (this.selected.has(node.id)) {
       this.selected.delete(node.id);
-    } else if (this.currentCost() + node.shieldCost <= this.session.puzzle.shieldBudget) {
+      announce(placementMessage(puzzle, node, false, this.selected));
+    } else if (this.currentCost() + node.shieldCost <= puzzle.shieldBudget) {
       this.selected.add(node.id);
+      announce(placementMessage(puzzle, node, true, this.selected));
     } else {
-      this.cameras.main.shake(90, 0.0025);
+      if (!prefersReducedMotion()) {
+        this.cameras.main.shake(90, 0.0025);
+      }
       this.setStatus('Budget exceeded. Remove a breaker before placing another.', COLORS.amberText);
+      announce(refusalMessage(puzzle, node, this.selected));
       return;
     }
 
@@ -381,6 +447,7 @@ export class DailyGame extends Scene {
       index < used ? '◆' : '◇'
     ).join(' ');
     this.budgetText.setText(`${tokens}   ${used}/${this.session.puzzle.shieldBudget}`);
+    this.syncMirror();
     reportDemoView({ phase: 'board', selectedIds: [...this.selected] });
   }
 
@@ -402,19 +469,50 @@ export class DailyGame extends Scene {
     try {
       outcome = evaluateShielding(this.session.puzzle, [...this.selected]);
     } catch (error) {
-      this.setStatus(error instanceof Error ? error.message : 'Invalid breaker layout', COLORS.coralText);
+      const message = error instanceof Error ? error.message : 'Invalid breaker layout';
+      this.setStatus(message, COLORS.coralText);
+      announce(message);
       return;
     }
 
     this.running = true;
+    const reduced = prefersReducedMotion();
+    this.board?.setMotion(reduced ? 'reduced' : 'full');
     reportDemoView({ phase: 'cascade', selectedIds: [...this.selected] });
     this.runButton?.disableInteractive();
     this.setStatus('Deploying change… tracing downstream failures.', COLORS.coralText);
+    announce('Change deployed. Tracing downstream failures.');
     this.widgets.get(this.session.puzzle.sourceId)?.redraw('failed');
+    this.syncMirror();
+    if (reduced) {
+      // No moving pulses: show the final cascade state at once, then the result.
+      this.showOutcome(outcome);
+      this.time.delayedCall(700, () => {
+        void this.finishSimulation(outcome);
+      });
+      return;
+    }
     this.animateFailure(outcome);
     this.time.delayedCall(1650, () => {
       void this.finishSimulation(outcome);
     });
+  }
+
+  /** The cascade's end state on the canvas and in the mirror, announced once. */
+  private showOutcome(outcome: ShieldOutcome): void {
+    if (!this.session) {
+      return;
+    }
+    for (const id of outcome.failedIds) {
+      this.widgets.get(id)?.redraw('failed');
+      this.statuses.set(id, 'failed');
+    }
+    for (const id of outcome.savedIds) {
+      this.widgets.get(id)?.redraw('saved');
+      this.statuses.set(id, 'saved');
+    }
+    this.syncMirror();
+    announce(cascadeMessage(this.session.puzzle, outcome));
   }
 
   private animateFailure(outcome: ShieldOutcome): void {
@@ -451,11 +549,7 @@ export class DailyGame extends Scene {
       });
     });
 
-    this.time.delayedCall(1120, () => {
-      for (const id of outcome.savedIds) {
-        this.widgets.get(id)?.redraw('saved');
-      }
-    });
+    this.time.delayedCall(1120, () => this.showOutcome(outcome));
   }
 
   private async finishSimulation(outcome: ShieldOutcome): Promise<void> {
@@ -464,6 +558,10 @@ export class DailyGame extends Scene {
     }
     try {
       const response = await submitScore(outcome.shieldIds);
+      if (prefersReducedMotion()) {
+        this.scene.start('Result', { session: this.session, response });
+        return;
+      }
       this.cameras.main.fadeOut(240, 6, 17, 29);
       this.time.delayedCall(250, () => {
         if (this.session) {
@@ -473,10 +571,10 @@ export class DailyGame extends Scene {
     } catch (error) {
       this.running = false;
       this.runButton?.setInteractive({ useHandCursor: true });
-      this.setStatus(
-        error instanceof Error ? error.message : 'Could not save the result',
-        COLORS.coralText
-      );
+      const message = error instanceof Error ? error.message : 'Could not save the result';
+      this.setStatus(message, COLORS.coralText);
+      this.syncMirror();
+      announce(message);
     }
   }
 

@@ -521,7 +521,8 @@ function propagateFailure(puzzle: DailyPuzzle, shields: Set<string>): Set<string
   return failed;
 }
 
-function weightedValue(puzzle: DailyPuzzle, node: AssetNode): number {
+/** The node's value under today's community protocol (50% more for the favoured class). */
+export function weightedValue(puzzle: DailyPuzzle, node: AssetNode): number {
   if (puzzle.protocol === 'protect-dashboards' && node.kind === 'dashboard') {
     return node.value * 1.5;
   }

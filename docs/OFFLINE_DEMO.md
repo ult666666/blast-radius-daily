@@ -14,7 +14,11 @@ The build also writes `dist-demo/manifest.json`: SHA-256, byte length, source co
 6. Press the privacy control once to arm it; a second press deletes your local contribution. The background fictional players remain. Replay starts with no personal score/vote/streak; completing a new run gives streak1.
 7. Reload to reset the entire sample. No localStorage, cookies or account-linked storage are written. A copy of this HTML remains playable offline.
 
-The game canvas retains its existing pointer controls and 1100×720 composition, aimed at desktop and landscape tablets. The host date selector and live summary are native HTML. This does not claim keyboard-only canvas gameplay or a narrow portrait-phone layout.
+The game canvas retains its existing pointer controls and 1100×720 composition, aimed at desktop and landscape tablets. The host date selector and live summary are native HTML. It does not claim a narrow portrait-phone layout.
+
+## Play by keyboard or screen reader
+
+Press Tab until focus reaches the map. Up and Down move through the assets in reading order, Left and Right jump between columns, and Space or Enter places or removes a breaker; a white ring on the canvas shows the focused asset. Press D (or Tab to **Trigger the change**) to deploy. On the result screen focus moves to the score heading, and Tab reaches the votes, **Replay the map** and the privacy control. A visually hidden list mirrors every asset and button for screen readers, and a live region announces breakers, tokens left, the cascade result and the score. With reduced motion requested by the system, the cascade appears at once instead of animating.
 
 ## Verify it
 
@@ -24,7 +28,9 @@ npm run verify
 npm run test:demo
 ```
 
-On a fresh Linux machine, install system dependencies with `npx playwright install --with-deps chromium --only-shell`. Playwright owns the temporary browser context, a90-second per-test deadline,15-second condition assertions and180-second global browser deadline. These bounds allow for Phaser animation progress on software-rendered hosted runners; CI bounds the full job separately. No listener or server is started by the browser workflow. It opens `file://` while the browser is offline and checks real pointer selection, budget rejection, cascade/result, exact shared-engine outcome, best-score replay, idempotent/transferred votes, both deletion steps, post-deletion replay, reload, a second day and landscape scaling. A canary storage value stays intact, no extra storage keys/cookies appear, and no external/API requests occur.
+On a fresh Linux machine, install system dependencies with `npx playwright install --with-deps chromium --only-shell`. Playwright owns the temporary browser context, a90-second per-test deadline,15-second condition assertions and a 360-second global browser deadline. These bounds allow for Phaser animation progress on software-rendered hosted runners; CI bounds the full job separately. The offline journeys open `file://` while the browser is offline and check real pointer selection, budget rejection, cascade/result, exact shared-engine outcome, best-score replay, idempotent/transferred votes, both deletion steps, post-deletion replay, reload, a second day and landscape scaling. A canary storage value stays intact, no extra storage keys/cookies appear, and no external/API requests occur.
+
+`test/keyboard.spec.ts` plays without the mouse. Offline, it tabs into the map, moves with the arrow keys, places and refuses breakers, checks each announcement, reads the canvas pixels to confirm the focus ring follows focus, deploys with D, checks the announced score against the shared engine, votes and replays by keyboard, and confirms that Tab leaves the game. A second run with reduced motion checks that the final cascade state appears in the same key press. The third test scans the board and result screens with axe-core (pinned 4.14.0, WCAG 2.0 to 2.2 A and AA rules plus best practices) and plays the Devvit game page in demo mode through the local Vite preview, which Playwright starts on 127.0.0.1 port 4175 (or `BLAST_PREVIEW_PORT`) for this test only.
 
 `.demo-results/results.json` records test outcomes. Selected-board, cascade, result/vote and deleted screenshots are attached; failures retain screenshots, context and traces. The CI `offline-gameplay` artifact includes these plus the exact HTML and manifest. Unit tests separately exercise impossible dates, invalid selections/protocols, independent state/snapshot ownership and deletion semantics.
 

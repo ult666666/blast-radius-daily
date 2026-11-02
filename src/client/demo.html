@@ -30,6 +30,12 @@
         Best on desktop or a landscape tablet; narrow portrait gameplay is not
         optimized.
       </p>
+      <p>
+        Keyboard: press Tab to reach the map, use the arrow keys to move between
+        assets, Space or Enter to place or remove a breaker, and D to trigger
+        the change. Screen readers read the map as a list of assets, and
+        announcements report breakers, tokens, the cascade and the score.
+      </p>
       <form id="day-form">
         <label for="incident-day">Incident day (UTC)</label
         ><input
@@ -50,10 +56,7 @@
       >
         Loading the local map…
       </p>
-      <div
-        id="game-container"
-        aria-label="Pointer-operated lineage puzzle"
-      ></div>
+      <div id="game-container" aria-hidden="true"></div>
       <h2>This local run</h2>
       <dl class="run-summary">
         <div>
@@ -99,8 +102,9 @@
     <footer>
       <p>
         This demo does not test Reddit installation, Redis storage, live
-        community activity or comment permissions. The existing game canvas uses
-        pointer controls; the date selector and local summary are native HTML.
+        community activity or comment permissions. The game canvas takes a
+        mouse, touch or keyboard; the date selector and local summary are native
+        HTML.
       </p>
       <p>
         <a href="https://github.com/ult666666/blast-radius-daily"
