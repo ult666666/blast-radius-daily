@@ -66,17 +66,19 @@ test('offline canvas journey uses the real engine, transfers votes and deletes l
   ).toContainText('Map ready');
   await page.evaluate(() => localStorage.setItem('unrelated-canary', 'keep'));
   const puzzle = buildDailyPuzzle('2026-07-14', 'protect-models');
+  // The summary names assets as the map does: by label, not by id.
+  const label = (id: string) => puzzle.nodes.find((n) => n.id === id)!.label;
   for (const id of ['identity', 'pricing']) {
     const node = puzzle.nodes.find((n) => n.id === id)!;
     await clickCanvas(page, node.x, node.y);
   }
   await expect(page.getByLabel('Local selected breakers')).toHaveText(
-    'identity, pricing',
+    `${label('identity')}, ${label('pricing')}`,
   );
   const overBudget = puzzle.nodes.find((n) => n.id === 'geo')!;
   await clickCanvas(page, overBudget.x, overBudget.y);
   await expect(page.getByLabel('Local selected breakers')).toHaveText(
-    'identity, pricing',
+    `${label('identity')}, ${label('pricing')}`,
   );
   await info.attach('selected-board', {
     body: await page.screenshot(),
@@ -101,7 +103,7 @@ test('offline canvas journey uses the real engine, transfers votes and deletes l
     '19 / 25 (synthetic)',
   );
   await clickCanvas(page, 884, 493);
-  await expect(page.getByLabel('Local vote')).toHaveText('protect-dashboards');
+  await expect(page.getByLabel('Local vote')).toHaveText('Protect dashboards');
   await clickCanvas(page, 884, 493);
   await expect(page.getByLabel('Synthetic vote totals')).toHaveText('8, 11, 5');
   await clickCanvas(page, 884, 544);
@@ -156,7 +158,7 @@ test('offline canvas journey uses the real engine, transfers votes and deletes l
   const freshNode = puzzle.nodes.find((node) => node.id === 'identity')!;
   await clickCanvas(page, freshNode.x, freshNode.y);
   await expect(page.getByLabel('Local selected breakers')).toHaveText(
-    'identity',
+    label('identity'),
   );
   await clickCanvas(page, 941, 653);
   await expect(
