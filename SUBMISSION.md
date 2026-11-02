@@ -94,7 +94,7 @@ Reddit's installation-scoped Redis is a strong fit for community games: the natu
 
 - Add more graph topologies and limited-time community incidents.
 - Let moderators select thematic label packs for their subreddit.
-- Add an accessible reduced-motion mode, optional sound design, and a dedicated narrow portrait-phone layout.
+- Add optional sound design and a dedicated narrow portrait-phone layout. (Reduced motion, keyboard play and screen-reader support have since been added; see the README.)
 - Introduce cooperative multi-day “incident seasons” where each day's containment affects the next map.
 - Use Devvit analytics to tune the one-minute flow after real community testing.
 
