@@ -233,6 +233,11 @@ button span {
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
+/* The dot keeps its colour and glow; only the endless pulse stops. */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot { animation: none; }
+}
+
 @media (max-width: 560px) {
   body { padding: 8px; }
   .launch-card { min-height: min(500px, calc(100vh - 16px)); border-radius: 16px; }

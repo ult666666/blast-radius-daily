@@ -90,7 +90,7 @@ npx playwright install chromium --only-shell
 npm run test:demo
 ```
 
-The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Three keyboard journeys never touch the mouse: one plays a full incident, a vote and a replay offline, one repeats the cascade with reduced motion, and one plays the Devvit game page (`game.html?demo=1`) through the local Vite preview. That preview listens on 127.0.0.1 port 4175 during the run; set `BLAST_PREVIEW_PORT` to move it. axe-core 4.14.0, pinned as a development dependency, scans the board and result screens on both pages. Screenshots and failure traces are retained under `.demo-results/`.
+The browser tests open the built file while offline, select real canvas nodes, trace the cascade, check engine-derived scores, replay, change a vote and confirm deletion. They also cover a second date and landscape viewport. Three keyboard journeys never touch the mouse: one plays a full incident, a vote and a replay offline, one repeats the cascade with reduced motion, and one plays the Devvit game page (`game.html?demo=1`) through the local Vite preview. A fourth test opens the feed launch screen through the same preview and checks that its pulsing status dot stops under reduced motion. That preview listens on 127.0.0.1 port 4175 during the run; set `BLAST_PREVIEW_PORT` to move it. axe-core 4.14.0, pinned as a development dependency, scans the board and result screens on both pages. Screenshots and failure traces are retained under `.demo-results/`.
 
 The existing Vite visual preview remains available for development:
 
@@ -146,7 +146,7 @@ Devvit Web 0.15.1 does not expose an `AccountDelete` trigger in `devvit.json`, s
 - **Visible focus.** The canvas draws a 4px white ring with a dark edge around the focused asset or button, and the ring follows focus.
 - **Screen readers.** A visually hidden mirror next to the canvas lists every asset as an option in a multi-select list: its name, type, value (and its value under today's protocol), what it depends on, what it feeds, its breaker cost and, after the deploy, whether it failed or was saved. The result screen mirrors the score, the facts, the leaderboard and the same buttons. The canvas itself is hidden from assistive technology, so nothing is read twice.
 - **Announcements.** A polite live region reports each breaker placed or removed with the tokens left, refused placements, the cascade result (failed and saved assets, containment) and the score, as well as votes and deletion steps.
-- **Reduced motion.** With `prefers-reduced-motion: reduce`, the cascade shows its final state at once instead of moving pulses, and camera shake, fades, the loading pulse and hover scaling are off.
+- **Reduced motion.** With `prefers-reduced-motion: reduce`, the cascade shows its final state at once instead of moving pulses, and camera shake, fades, the loading pulse, the launch screen's pulsing status dot and hover scaling are off.
 - High-contrast status colors are paired with text and symbols rather than used alone.
 - The Phaser canvas preserves a stable 1100×720 composition and scales to desktop or landscape-tablet expanded views.
 - The inline launch screen has a separate mobile layout and does not trap feed scrolling.
