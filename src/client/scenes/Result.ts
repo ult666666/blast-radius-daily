@@ -55,16 +55,16 @@ export class Result extends Scene {
       this.cameras.main.fadeIn(240, 6, 17, 29);
     }
 
-    this.add.text(28, 20, 'BLAST / RADIUS', {
+    this.add.text(28, 20, 'Blast Radius', {
       fontFamily: SANS,
       fontSize: '23px',
       fontStyle: 'bold',
       color: COLORS.ink,
     });
     this.add
-      .text(1072, 25, `DAILY INCIDENT #${session.puzzle.episode} · ${session.puzzle.day}`, {
-        fontFamily: FONT,
-        fontSize: '10px',
+      .text(1072, 25, `Daily incident #${session.puzzle.episode} · ${session.puzzle.day}`, {
+        fontFamily: SANS,
+        fontSize: '12px',
         color: COLORS.muted,
       })
       .setOrigin(1, 0);
@@ -76,7 +76,7 @@ export class Result extends Scene {
       this,
       52,
       92,
-      response.outcome.optimal ? 'OPTIMAL CONTAINMENT' : 'INCIDENT REPORT',
+      response.outcome.optimal ? 'Optimal containment' : 'Incident report',
       response.outcome.optimal ? COLORS.cyanText : COLORS.amberText
     );
     this.add.text(52, 117, response.outcome.score.toLocaleString('en-US'), {
@@ -85,42 +85,42 @@ export class Result extends Scene {
       fontStyle: 'bold',
       color: response.outcome.optimal ? COLORS.cyanText : COLORS.ink,
     });
-    this.add.text(56, 190, 'POINTS', {
-      fontFamily: FONT,
-      fontSize: '11px',
+    this.add.text(56, 190, 'points', {
+      fontFamily: SANS,
+      fontSize: '12px',
       color: COLORS.muted,
     });
     this.add.text(
       330,
       124,
       response.outcome.optimal
-        ? 'YOU FOUND TODAY\'S BEST CUT.'
-        : 'THE BLAST WAS PARTIALLY CONTAINED.',
+        ? 'You found today’s best cut.'
+        : 'The blast was partially contained.',
       {
-        fontFamily: FONT,
-        fontSize: '13px',
+        fontFamily: SANS,
+        fontSize: '15px',
         fontStyle: 'bold',
         color: response.outcome.optimal ? COLORS.cyanText : COLORS.amberText,
         wordWrap: { width: 300 },
       }
     );
     this.add.text(330, 170, `Personal best: ${response.bestScore.toLocaleString('en-US')}`, {
-      fontFamily: FONT,
-      fontSize: '11px',
+      fontFamily: SANS,
+      fontSize: '12px',
       color: COLORS.muted,
     });
 
-    this.drawMetric(52, 226, 'BLAST CONTAINED', `${response.outcome.containment}%`, COLORS.cyan);
+    this.drawMetric(52, 226, 'Blast contained', `${response.outcome.containment}%`, COLORS.cyan);
     this.drawMetric(
       253,
       226,
-      'ENDPOINTS SAVED',
+      'Endpoints saved',
       `${response.outcome.savedCriticalIds.length}`,
       COLORS.green
     );
-    this.drawMetric(454, 226, 'DAY STREAK', `${response.streak}`, COLORS.violet);
+    this.drawMetric(454, 226, 'Day streak', `${response.streak}`, COLORS.violet);
 
-    addKicker(this, 52, 342, 'YOUR CIRCUIT BREAKERS');
+    addKicker(this, 52, 340, 'Your circuit breakers');
     const selectedLabels = response.outcome.shieldIds
       .map((id) => session.puzzle.nodes.find((node) => node.id === id)?.label ?? id)
       .join('  +  ');
@@ -145,7 +145,7 @@ export class Result extends Scene {
 
     this.drawCommunityMeter(response.community.responders, response.community.goal, response.community.percent);
 
-    addKicker(this, 52, 507, isDemoMode() ? 'LOCAL SCORE SUMMARY (NOT POSTED)' : 'OPTIONAL SCORE COMMENT', COLORS.amberText);
+    addKicker(this, 52, 505, isDemoMode() ? 'Score summary (not posted)' : 'Optional score comment', COLORS.amberText);
     this.add.text(52, 527, response.commentPreview, {
       fontFamily: SANS,
       fontSize: '9px',
@@ -167,11 +167,11 @@ export class Result extends Scene {
       height: 42,
       label:
         response.share.status === 'ready'
-          ? `POST SCORE AS u/${session.username}`
-          : isDemoMode() ? 'COMMENTS UNAVAILABLE IN OFFLINE DEMO' : 'SCORE SHARING LOCKED PENDING REVIEW',
+          ? `Post score as u/${session.username}`
+          : isDemoMode() ? 'Comments unavailable in the offline demo' : 'Score sharing locked pending review',
       color: response.share.status === 'ready' ? COLORS.amber : COLORS.panelLight,
       textColor: response.share.status === 'ready' ? '#191403' : COLORS.muted,
-      fontSize: response.share.status === 'ready' ? 11 : 9,
+      fontSize: response.share.status === 'ready' ? 13 : 11,
       onPress: () => {
         if (response.share.status === 'ready') {
           void this.postScore(shareButton, response.share.token);
@@ -192,32 +192,32 @@ export class Result extends Scene {
       y: 650,
       width: 250,
       height: 42,
-      label: 'REPLAY THE MAP',
+      label: 'Replay the map',
       color: COLORS.panelLight,
       textColor: COLORS.ink,
-      fontSize: 11,
+      fontSize: 13,
       onPress: () => this.scene.start('DailyGame'),
     });
 
-    addKicker(this, 720, 93, 'TODAY\'S LEADERBOARD');
+    addKicker(this, 720, 91, 'Today’s leaderboard');
     this.add.text(720, 113, `${response.community.responders} responders in this community`, {
       fontFamily: SANS,
-      fontSize: '11px',
+      fontSize: '12px',
       color: COLORS.muted,
     });
     this.renderLeaderboard(response, session.username);
 
     this.add.rectangle(884, 399, 328, 1, COLORS.grid, 1);
-    addKicker(this, 720, 420, 'CHOOSE TOMORROW\'S PROTOCOL', COLORS.amberText);
+    addKicker(this, 720, 418, 'Vote for tomorrow’s protocol', COLORS.amberText);
     this.add.text(720, 440, isDemoMode() ? 'Try one local vote. The fictional tally resets on reload.' : 'Your vote changes which asset class is worth 50% more tomorrow.', {
       fontFamily: SANS,
-      fontSize: '11px',
+      fontSize: '12px',
       color: COLORS.muted,
       wordWrap: { width: 325 },
     });
-    this.voteStatus = this.add.text(720, 654, 'One vote per responder. You can change it.', {
+    this.voteStatus = this.add.text(720, 652, 'One vote per responder. You can change it.', {
       fontFamily: SANS,
-      fontSize: '10px',
+      fontSize: '11px',
       color: COLORS.muted,
     });
     this.renderVoteButtons(session.selectedProtocol, session.protocolVotes);
@@ -226,10 +226,10 @@ export class Result extends Scene {
       y: 681,
       width: 328,
       height: 22,
-      label: 'PRIVACY · DELETE MY SAVED GAME DATA',
+      label: 'Privacy: delete my saved game data',
       color: COLORS.panelLight,
       textColor: COLORS.muted,
-      fontSize: 8,
+      fontSize: 11,
       onPress: () => {
         void this.deleteSavedData(privacyButton);
       },
@@ -323,8 +323,8 @@ export class Result extends Scene {
     graphics.lineStyle(1, color, 0.6);
     graphics.strokeRoundedRect(x, y, 182, 88, 12);
     this.add.text(x + 16, y + 14, label, {
-      fontFamily: FONT,
-      fontSize: '9px',
+      fontFamily: SANS,
+      fontSize: '12px',
       color: COLORS.muted,
     });
     this.add.text(x + 16, y + 35, value, {
@@ -336,10 +336,10 @@ export class Result extends Scene {
   }
 
   private drawCommunityMeter(responders: number, goal: number, percent: number): void {
-    addKicker(this, 52, 437, 'COMMUNITY CONTAINMENT METER');
-    this.add.text(628, 437, `${responders}/${goal} RESPONDERS`, {
-      fontFamily: FONT,
-      fontSize: '9px',
+    addKicker(this, 52, 435, 'Community containment');
+    this.add.text(628, 437, `${responders} of ${goal} responders`, {
+      fontFamily: SANS,
+      fontSize: '12px',
       color: COLORS.muted,
     }).setOrigin(1, 0);
     const graphics = this.add.graphics();
@@ -349,7 +349,7 @@ export class Result extends Scene {
     graphics.fillRoundedRect(52, 460, Math.max(10, 576 * (percent / 100)), 14, 7);
     this.add.text(52, 479, `${percent}% of today’s community response target`, {
       fontFamily: SANS,
-      fontSize: '10px',
+      fontSize: '11px',
       color: COLORS.muted,
     });
   }
@@ -408,10 +408,10 @@ export class Result extends Scene {
         y: 493 + index * 51,
         width: 328,
         height: 40,
-        label: `${isSelected ? '✓ ' : ''}${protocol.shortLabel}     ${count} VOTES`,
+        label: `${isSelected ? '✓ ' : ''}${protocol.label}: ${count} ${count === 1 ? 'vote' : 'votes'}`,
         color: isSelected ? COLORS.cyan : COLORS.panelLight,
         textColor: isSelected ? '#04110e' : COLORS.ink,
-        fontSize: 10,
+        fontSize: 12,
         onPress: () => {
           void this.castVote(protocol.id);
         },
@@ -438,17 +438,17 @@ export class Result extends Scene {
 
   private async postScore(button: GameObjects.Container, token: string): Promise<void> {
     button.disableInteractive();
-    setButtonLabel(button, 'POSTING ONE COMMENT…');
+    setButtonLabel(button, 'Posting one comment…');
     this.mirror?.setAction('share', 'Posting one comment…', true);
     try {
       const response = await shareScore(token);
       const done = response.status === 'posted' ? 'Posted to comments' : 'Already posted today';
-      setButtonLabel(button, `${done.toUpperCase()}  ✓`);
+      setButtonLabel(button, `${done} ✓`);
       this.mirror?.setAction('share', done, true);
       announce(`${done}.`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Post failed';
-      setButtonLabel(button, message.toUpperCase());
+      setButtonLabel(button, message);
       button.setInteractive({ useHandCursor: true });
       this.mirror?.setAction('share', `Post failed: ${message}. Try again`);
       announce(message);
@@ -459,24 +459,24 @@ export class Result extends Scene {
     if (!this.deleteArmed) {
       this.deleteArmed = true;
       reportDemoView({ phase: 'confirm-delete' });
-      setButtonLabel(button, 'PRESS AGAIN TO DELETE SAVED DATA');
+      setButtonLabel(button, 'Press again to delete saved data');
       this.mirror?.setAction('privacy', 'Press again to delete saved data');
       this.say('Deletion removes scores, votes, streak, and share drafts from app storage. Press again to confirm.', COLORS.amberText);
       return;
     }
 
     button.disableInteractive();
-    setButtonLabel(button, 'DELETING SAVED DATA…');
+    setButtonLabel(button, 'Deleting saved data…');
     this.mirror?.setAction('privacy', 'Deleting saved data…', true);
     try {
       await deleteGameData();
       reportDemoView({ phase: 'result', selectedIds: [] });
-      setButtonLabel(button, 'SAVED GAME DATA DELETED  ✓');
+      setButtonLabel(button, 'Saved game data deleted ✓');
       this.mirror?.setAction('privacy', 'Saved game data deleted', true);
       this.say('Your app-stored game data has been removed.', COLORS.cyanText);
     } catch (error) {
       this.deleteArmed = false;
-      setButtonLabel(button, 'PRIVACY · DELETE MY SAVED GAME DATA');
+      setButtonLabel(button, 'Privacy: delete my saved game data');
       button.setInteractive({ useHandCursor: true });
       this.mirror?.setAction('privacy', 'Privacy: delete my saved game data');
       this.say(error instanceof Error ? error.message : 'Could not delete saved data', COLORS.coralText);

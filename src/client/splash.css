@@ -71,9 +71,9 @@ footer {
   gap: 9px;
   border-bottom: 1px solid var(--grid);
   color: var(--cyan);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .episode {
@@ -130,28 +130,13 @@ footer {
 .mark::before { width: 76px; left: 13px; top: 47px; transform: rotate(-29deg); }
 .mark::after { width: 76px; left: 13px; top: 47px; transform: rotate(29deg); }
 
-.eyebrow {
-  margin: 0 0 10px;
-  color: var(--cyan);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-}
-
 h1 {
   margin: 0;
-  font-size: clamp(48px, 11vw, 96px);
-  font-weight: 900;
-  letter-spacing: -0.075em;
-  line-height: 0.77;
-}
-
-h1 em {
-  color: transparent;
-  font-style: normal;
-  -webkit-text-stroke: 1.5px var(--coral);
-  text-shadow: 0 0 35px rgba(255, 94, 87, 0.15);
+  max-width: 11ch;
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
 .lede {
@@ -162,29 +147,12 @@ h1 em {
   line-height: 1.55;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chips span {
-  padding: 6px 9px;
-  border: 1px solid var(--grid);
-  border-radius: 999px;
-  color: var(--muted);
-  background: rgba(6, 17, 29, 0.72);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
 footer {
   justify-content: space-between;
   gap: 18px;
   border-top: 1px solid var(--grid);
   background: rgba(6, 17, 29, 0.68);
+  font-family: inherit;
 }
 
 footer div {
@@ -194,13 +162,12 @@ footer div {
 
 footer strong {
   color: var(--ink);
-  font-size: 11px;
-  letter-spacing: 0.05em;
+  font-size: 14px;
 }
 
 footer div span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 button {
@@ -210,10 +177,9 @@ button {
   border-radius: 11px;
   background: var(--cyan);
   color: #04110e;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.06em;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
   box-shadow: 0 10px 28px rgba(54, 225, 193, 0.18);
 }
@@ -221,7 +187,11 @@ button {
 button:hover,
 button:focus-visible {
   filter: brightness(1.08);
-  transform: translateY(-1px);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }
 
 button span {

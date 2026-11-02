@@ -71,7 +71,7 @@ export function addButton(
   const background = scene.add.graphics();
   const label = scene.add
     .text(0, 0, options.label, {
-      fontFamily: FONT,
+      fontFamily: SANS,
       fontSize: `${options.fontSize ?? 14}px`,
       fontStyle: 'bold',
       color: textColor,
@@ -118,12 +118,16 @@ export function addKicker(
   color: string = COLORS.cyanText
 ): GameObjects.Text {
   return scene.add.text(x, y, text, {
-    fontFamily: FONT,
-    fontSize: '10px',
+    fontFamily: SANS,
+    fontSize: '12px',
     fontStyle: 'bold',
-    letterSpacing: 1.2,
     color,
   });
+}
+
+/** "COMMUNITY SIGNALS" as "Community signals", for data stored in capitals. */
+export function sentenceCase(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
 export type FocusRect = { x: number; y: number; width: number; height: number };
