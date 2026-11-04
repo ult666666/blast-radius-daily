@@ -46,6 +46,12 @@
     "vite": "8.3.5"
   },
   "overrides": {
-    "tmp@0.0.33": "0.2.7"
+    "tmp@0.0.33": "0.2.7",
+    "eslint": {
+      "minimatch": "^11.0.1"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.1"
+    }
   }
 }
