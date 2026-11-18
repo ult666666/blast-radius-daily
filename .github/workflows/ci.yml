@@ -30,6 +30,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
+      - name: Verify the CLI used by dev, deploy and launch is installed
+        run: test -x node_modules/.bin/devvit
       - run: npm run type-check
       - run: npm run lint
       - name: Test the daily-puzzle engine
